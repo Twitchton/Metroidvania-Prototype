@@ -15,6 +15,7 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
     private bool isFacingRight = true;
+    [SerializeField] private bool airJump = false;
 
     //wall sliding variables
     private bool isWallSliding;
@@ -31,7 +32,17 @@ public class PlayerMovement: MonoBehaviour
     void Update()
     {
         WallSlide();
-        Flip();
+
+        if (!isWallJumping)
+        {
+            Flip();
+        }
+        
+
+        if (Isfloored() || IsWalled())
+        {
+            airJump = true;
+        }
         
     }
 
@@ -49,6 +60,11 @@ public class PlayerMovement: MonoBehaviour
         if (context.performed && Isfloored())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+        }
+        else if (context.performed && !isWallJumping && !isWallSliding && airJump)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            airJump = false;
         }
 
         //action ended early
@@ -123,7 +139,7 @@ public class PlayerMovement: MonoBehaviour
     private void Flip()
     {
         //checks if player is changing direction
-        if ((isFacingRight && horizontal <0f) || (!isFacingRight && horizontal >0f))
+        if ((isFacingRight && horizontal <0f) || (!isFacingRight && horizontal >0f) || isWallJumping)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
