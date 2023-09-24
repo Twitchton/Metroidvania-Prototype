@@ -15,7 +15,7 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
     private bool isFacingRight = true;
-    [SerializeField] private bool airJump = false;
+    private bool airJump = false;
 
     //wall sliding variables
     private bool isWallSliding;
