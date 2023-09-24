@@ -295,7 +295,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 293916681}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 434b589bfb8a76440865e9f6ca8c88bf, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -642,9 +642,9 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
+  animator: {fileID: 508027717}
   speed: 8
   jumpingPower: 16
-  airJump: 0
   wallSlidingSpeed: 1
   wallJumpingTime: 2
   wallJumpingDuration: 0.35
@@ -781,6 +781,7 @@ GameObject:
   m_Component:
   - component: {fileID: 508027715}
   - component: {fileID: 508027716}
+  - component: {fileID: 508027717}
   m_Layer: 0
   m_Name: CharacterSprite
   m_TagString: Untagged
@@ -855,6 +856,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &508027717
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508027714}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 312496b25d842af4a938e96c7d5aaee0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &528472252
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,7 +1015,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1436160716}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 434b589bfb8a76440865e9f6ca8c88bf, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1417,7 +1439,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 2077202730}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 434b589bfb8a76440865e9f6ca8c88bf, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

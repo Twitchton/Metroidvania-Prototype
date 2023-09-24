@@ -9,6 +9,7 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private LayerMask wallLayer;
+    public Animator animator;
 
     //movement variables
     private float horizontal;
@@ -29,10 +30,13 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private float wallJumpingDuration;
     [SerializeField] private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
+    //animation variables
+
     void Update()
     {
         WallSlide();
 
+        //determining when to flip sprite
         if (!isWallJumping)
         {
             Flip();
@@ -43,7 +47,8 @@ public class PlayerMovement: MonoBehaviour
         {
             airJump = true;
         }
-        
+
+        animateMovement();
     }
 
     private void FixedUpdate()
@@ -152,5 +157,11 @@ public class PlayerMovement: MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         horizontal = context.ReadValue<Vector2>().x;
+    }
+
+    private void animateMovement()
+    {
+        animator.SetFloat("HorizontalSpeed", Mathf.Abs(rb.velocity.x));
+        animator.SetFloat("VerticalVelocity", rb.velocity.y);
     }
 }
