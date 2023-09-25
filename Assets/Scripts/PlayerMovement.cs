@@ -141,6 +141,7 @@ public class PlayerMovement: MonoBehaviour
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
     }
 
+    //function to flip the player sprite
     private void Flip()
     {
         //checks if player is changing direction
