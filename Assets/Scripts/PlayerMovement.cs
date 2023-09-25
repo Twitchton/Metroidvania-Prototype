@@ -163,5 +163,6 @@ public class PlayerMovement: MonoBehaviour
     {
         animator.SetFloat("HorizontalSpeed", Mathf.Abs(rb.velocity.x));
         animator.SetFloat("VerticalVelocity", rb.velocity.y);
+        animator.SetBool("IsWallSliding", isWallSliding);
     }
 }
