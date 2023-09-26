@@ -18,21 +18,25 @@ public class BasicEnemyController : MonoBehaviour
     //variables
     private State currentState;
     private bool floorDetected, wallDetected;
-    private float facingDirection, currentHealth;
+    private float currentHealth, knockbackStartTime;
+    private int facingDirection, damageDirection;
 
     private Vector2 movement;
 
     //object references
     [SerializeField] private GameObject alive;
     [SerializeField] private Rigidbody2D aliveRB;
+    [SerializeField] private Animator animator;
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private Vector2 knockBackSpeed;
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private float floorCheckDistance;
     [SerializeField] private float wallCheckDistance;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float maxHealth;
+    [SerializeField] private float knockbackDuration;
 
 
     //function called every frame
@@ -127,17 +131,23 @@ public class BasicEnemyController : MonoBehaviour
     //Knockback state
     private void EnterKnockbackState()
     {
-
+        knockbackStartTime = Time.time;
+        movement.Set(knockBackSpeed.x * damageDirection, knockBackSpeed.y);
+        aliveRB.velocity = movement;
+        animator.SetBool("Knockback", true);
     }
 
     private void UpdateKnockbackState()
     {
-
+        if (Time.time >= knockbackStartTime + knockbackDuration)
+        {
+            SwitchState(State.running);
+        }
     }
 
     private void ExitKnockbackState()
     {
-
+        animator.SetBool("Knockback", false);
     }
 
     //Dead state
@@ -214,11 +224,35 @@ public class BasicEnemyController : MonoBehaviour
     //function to flip enemy sprite
     private void Flip()
     {
-        facingDirection *= -1f;
+        facingDirection *= -1;
         Vector3 localScale = alive.transform.localScale;
         localScale.x *= -1f;
         alive.transform.localScale = localScale;
-
     }
 
+    //function to take damage
+    private void Damage(float[] attackDetails)
+    {
+        currentHealth -= attackDetails[0];
+
+        if (attackDetails[1] > alive.transform.position.x)
+        {
+            damageDirection = -1;
+        }
+        else
+        {
+            damageDirection = 1;
+        }
+
+        //hit particle
+
+        if (currentHealth > 0.0f)
+        {
+            SwitchState(State.knockback);
+        }
+        else
+        {
+            SwitchState(State.dead);
+        }
+    }
 }
