@@ -17,8 +17,8 @@ public class BasicEnemyController : MonoBehaviour
 
     //variables
     private State currentState;
-    private bool floorDetected, wallDetected;
-    private float currentHealth, knockbackStartTime;
+    private bool floorDetected, wallDetected, playerDetected;
+    private float currentHealth, knockbackStartTime, behaviourTimer;
     private int facingDirection, damageDirection;
 
     private Vector2 movement;
@@ -37,7 +37,16 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float maxHealth;
     [SerializeField] private float knockbackDuration;
+    [SerializeField] private float behaviourTimerValue;
 
+    //initial state of the enemy
+    private void Start()
+    {
+        currentState = State.idle;
+        behaviourTimer = behaviourTimerValue * 2f;
+        playerDetected = false;
+        facingDirection = 1;
+    }
 
     //function called every frame
     private void Update()
@@ -71,45 +80,72 @@ public class BasicEnemyController : MonoBehaviour
     //Idle state
     private void EnterIdleState()
     {
-
+        animator.SetBool("Idle", true);
     }
 
     private void UpdateIdleState()
     {
-
+        if(behaviourTimer <= 0f)
+        {
+            SwitchState(State.running);
+        }
+        behaviourTimer -= Time.deltaTime;
     }
 
     private void ExitIdleState()
     {
-
+        behaviourTimer = behaviourTimerValue;
+        animator.SetBool("Idle", false);
     }
 
     //Running state
     private void EnterRunningState()
     {
-
+        animator.SetBool("Running", true);
     }
     
     private void UpdateRunningState()
     {
         floorDetected = Physics2D.Raycast(floorCheck.position, Vector2.down, floorCheckDistance, floorLayer);
-        wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.down, wallCheckDistance, wallLayer);
+        wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.right, wallCheckDistance, wallLayer);
 
         if (!floorDetected || wallDetected)
         {
-            //stop
-            //flip?
+            if (playerDetected)
+            {
+                movement.Set(0f, 0f);
+                aliveRB.velocity = movement;
+            }
+
+            if (!playerDetected)
+            {
+                Flip();
+            }
+
         }
         else
         {
             movement.Set(movementSpeed*facingDirection, aliveRB.velocity.y);
             aliveRB.velocity = movement;
         }
+
+        if (!playerDetected)
+        {
+            behaviourTimer -= Time.deltaTime;
+        }
+
+        if (behaviourTimer <= 0)
+        {
+            SwitchState(State.idle);
+        }
     }
 
     private void ExitRunningState()
     {
-
+        behaviourTimer = behaviourTimerValue*2;
+        movement.Set(0f, 0f);
+        aliveRB.velocity = movement;
+        animator.SetBool("Running", false);
     }
 
     //Attacking state
@@ -152,8 +188,9 @@ public class BasicEnemyController : MonoBehaviour
 
     //Dead state
     private void EnterDeadState() 
-    { 
-    
+    {
+        //play death animation
+        Destroy(gameObject);
     }
 
     private void UpdateDeadState()
@@ -254,5 +291,15 @@ public class BasicEnemyController : MonoBehaviour
         {
             SwitchState(State.dead);
         }
+    }
+
+    //Function to visualize raycasts for checks
+    private void OnDrawGizmos()
+    {
+        //floor check
+        Gizmos.DrawLine(floorCheck.position, new Vector2(floorCheck.position.x, floorCheck.position.y - floorCheckDistance));
+
+        //wall check
+        Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
     }
 }
