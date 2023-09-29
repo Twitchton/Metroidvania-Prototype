@@ -17,6 +17,7 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private float jumpingPower = 16f;
     private bool isFacingRight = true;
     private bool airJump = false;
+    private bool canFlip = true;
 
     //wall sliding variables
     private bool isWallSliding;
@@ -147,10 +148,12 @@ public class PlayerMovement: MonoBehaviour
         //checks if player is changing direction
         if ((isFacingRight && horizontal <0f) || (!isFacingRight && horizontal >0f) || isWallJumping)
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            if (canFlip) {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
         }
         
     }
@@ -165,5 +168,17 @@ public class PlayerMovement: MonoBehaviour
         animator.SetFloat("HorizontalSpeed", Mathf.Abs(rb.velocity.x));
         animator.SetFloat("VerticalVelocity", rb.velocity.y);
         animator.SetBool("IsWallSliding", isWallSliding);
+    }
+
+    //method to lock the ability to flip (used for attacks)
+    public void disableFlip()
+    {
+        canFlip = false;
+    }
+
+    //method to re-enable flip
+    public void enableFlip()
+    {
+        canFlip = true;
     }
 }

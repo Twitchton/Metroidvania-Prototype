@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     //Object references
+    [SerializeField] private GameObject parent;
     [SerializeField] private Transform attack1HitboxPos;
     [SerializeField] private LayerMask damagable;
     [SerializeField] private Rigidbody2D rb;
@@ -15,9 +16,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float inputTimer; //timing to fudge attack time
     [SerializeField] private float attack1Radius;
     [SerializeField] private int attack1Damage;
-    public int health, maxHealth, mana, maxMana;
-    private bool isAttacking, isFirstAttack, gotInput, combo, attack1, attack2;
-    private float lastInputTime;
+    [SerializeField] public int health, maxHealth, mana, maxMana;
+    [SerializeField]  private bool isAttacking, isFirstAttack, gotInput, combo, attack1, attack2;
+    [SerializeField]  private float lastInputTime;
 
     private void Start()
     {
@@ -26,17 +27,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-
-    }
-
-    public void DisableFlip()
-    {
-
-    }
-
-    public void EnableFlip()
-    {
-
+        CheckAttacks();
     }
 
     //function for catching inputs from player.
@@ -47,6 +38,11 @@ public class PlayerCombat : MonoBehaviour
             gotInput = true;
             lastInputTime = Time.time;
             //attempt combat
+        }
+
+        if (context.canceled)
+        {
+            gotInput = false;
         }
 
     }
@@ -61,10 +57,11 @@ public class PlayerCombat : MonoBehaviour
             {
                 gotInput = false;
                 isAttacking = true;
-                isFirstAttack = !isFirstAttack;
-                animator.SetBool("attack1", true);
-                animator.SetBool("firstAttack", isFirstAttack);
-                animator.SetBool("isAttacking", isAttacking);
+                //isFirstAttack = !isFirstAttack;
+                isFirstAttack = true;
+                animator.SetBool("Attack1", true);
+                animator.SetBool("FirstAttack", isFirstAttack);
+                animator.SetBool("IsAttacking", isAttacking);
             }
         }
 
@@ -77,6 +74,7 @@ public class PlayerCombat : MonoBehaviour
     //check hitbox for landing attack
     private void CheckAttackHitbox()
     {
+        //creates a circle collider to check for attack
         Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitboxPos.position, attack1Radius, damagable);
 
         foreach (Collider2D collider in detectedObjects)
@@ -89,8 +87,8 @@ public class PlayerCombat : MonoBehaviour
     private void FinishAttack1()
     {
         isAttacking = false;
-        animator.SetBool("isAttacking", isAttacking);
-        animator.SetBool("attack1", false);
+        animator.SetBool("IsAttacking", isAttacking);
+        animator.SetBool("Attack1", false);
     }
 
     //Visualizeses attack radius
@@ -99,9 +97,16 @@ public class PlayerCombat : MonoBehaviour
         Gizmos.DrawWireSphere(attack1HitboxPos.position, attack1Radius);
     }
 
-    private bool canCombo()
+    //function that calls the disable flip function 
+    public void disableFlip()
     {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1");
+        parent.GetComponent<PlayerMovement>().disableFlip();
+    }
+
+    //function that calls the disable flip function 
+    public void enableFlip()
+    {
+        parent.GetComponent<PlayerMovement>().disableFlip();
     }
 
 }
