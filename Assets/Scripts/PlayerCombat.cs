@@ -106,7 +106,7 @@ public class PlayerCombat : MonoBehaviour
     //function that calls the disable flip function 
     public void enableFlip()
     {
-        parent.GetComponent<PlayerMovement>().disableFlip();
+        parent.GetComponent<PlayerMovement>().enableFlip();
     }
 
 }
