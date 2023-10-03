@@ -19,7 +19,7 @@ public class BasicEnemyController : MonoBehaviour
     private State currentState;
     private bool floorDetected, wallDetected, playerDetected;
     private float currentHealth, knockbackStartTime, behaviourTimer;
-    private int facingDirection, damageDirection;
+    private int facingDirection, damageDirection, playerDirection;
 
     private Vector2 movement;
 
@@ -38,6 +38,7 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float maxHealth;
     [SerializeField] private float knockbackDuration;
     [SerializeField] private float behaviourTimerValue;
+    [SerializeField] private float detectionRadius;
 
     //initial state of the enemy
     private void Start()
@@ -85,6 +86,12 @@ public class BasicEnemyController : MonoBehaviour
 
     private void UpdateIdleState()
     {
+        //logic for idlestate when player is detected
+        if (playerDetected)
+        {
+
+        }
+
         if(behaviourTimer <= 0f)
         {
             SwitchState(State.running);
@@ -94,7 +101,8 @@ public class BasicEnemyController : MonoBehaviour
 
     private void ExitIdleState()
     {
-        behaviourTimer = behaviourTimerValue;
+        //setting timer for other behaviours from random value
+        behaviourTimer = Random.Range(behaviourTimerValue / 2f, behaviourTimerValue);
         animator.SetBool("Idle", false);
     }
 
@@ -106,34 +114,42 @@ public class BasicEnemyController : MonoBehaviour
     
     private void UpdateRunningState()
     {
+        //checks for blocks (gaps or walls)
         floorDetected = Physics2D.Raycast(floorCheck.position, Vector2.down, floorCheckDistance, floorLayer);
         wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.right, wallCheckDistance, wallLayer);
 
+        //check if path is impeded
         if (!floorDetected || wallDetected)
-        {
+        {   
+            //if player is detected wait by obstacle
             if (playerDetected)
             {
                 movement.Set(0f, 0f);
                 aliveRB.velocity = movement;
+                SwitchState(State.idle);
             }
 
+            //if player isn't detected flip and continue to move
             if (!playerDetected)
             {
                 Flip();
             }
 
         }
+        //if no obstables are in the way move
         else
         {
             movement.Set(movementSpeed*facingDirection, aliveRB.velocity.y);
             aliveRB.velocity = movement;
         }
 
+        //cooldown on run if player isn't detected
         if (!playerDetected)
         {
             behaviourTimer -= Time.deltaTime;
         }
 
+        //calling switch from current state
         if (behaviourTimer <= 0)
         {
             SwitchState(State.idle);
@@ -142,7 +158,8 @@ public class BasicEnemyController : MonoBehaviour
 
     private void ExitRunningState()
     {
-        behaviourTimer = behaviourTimerValue*2;
+        //setting longer timer for idle state
+        behaviourTimer = Random.Range(behaviourTimerValue/ 2f, behaviourTimerValue)*2f;
         movement.Set(0f, 0f);
         aliveRB.velocity = movement;
         animator.SetBool("Running", false);
@@ -207,6 +224,7 @@ public class BasicEnemyController : MonoBehaviour
 
     private void SwitchState(State state)
     {
+        //exit switch statement for the state machine
         switch (currentState)
         {
             case State.idle:
@@ -231,6 +249,7 @@ public class BasicEnemyController : MonoBehaviour
              
         }
 
+        //enter switch statement for the state machine
         switch (state)
         {
             case State.idle:
@@ -261,6 +280,7 @@ public class BasicEnemyController : MonoBehaviour
     //function to flip enemy sprite
     private void Flip()
     {
+        //flips sprite by changing it's local transform
         facingDirection *= -1;
         Vector3 localScale = alive.transform.localScale;
         localScale.x *= -1f;
@@ -270,6 +290,7 @@ public class BasicEnemyController : MonoBehaviour
     //function to take damage
     private void Damage(float[] attackDetails)
     {
+        //getting array of values for the attack
         currentHealth -= attackDetails[0];
 
         if (attackDetails[1] > alive.transform.position.x)
@@ -281,8 +302,9 @@ public class BasicEnemyController : MonoBehaviour
             damageDirection = 1;
         }
 
-        //hit particle
+        //hit particle can be added here
 
+        //checks what state needs to be transitioned to
         if (currentHealth > 0.0f)
         {
             SwitchState(State.knockback);
@@ -291,6 +313,12 @@ public class BasicEnemyController : MonoBehaviour
         {
             SwitchState(State.dead);
         }
+    }
+
+    //function to determine if player has been detected by AI
+    private void detectPlayer()
+    {
+
     }
 
     //Function to visualize raycasts for checks
