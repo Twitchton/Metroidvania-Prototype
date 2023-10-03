@@ -17,7 +17,7 @@ public class BasicEnemyController : MonoBehaviour
 
     //variables
     private State currentState;
-    private bool floorDetected, wallDetected, playerDetected;
+    [SerializeField] private bool floorDetected, wallDetected, playerDetected;
     private float currentHealth, knockbackStartTime, behaviourTimer, detectionTimer;
     private int facingDirection, damageDirection, playerDirection;
 
@@ -327,17 +327,17 @@ public class BasicEnemyController : MonoBehaviour
         float playerDist = Vector2.Distance(alive.transform.position, player.transform.position);
 
         //Raycast to check if player is obstructed
-        RaycastHit2D hit = Physics2D.Linecast(alive.transform.position, player.transform.position - alive.transform.position);
+        RaycastHit2D hit = Physics2D.Raycast(alive.transform.position, player.transform.position - alive.transform.position);
 
         //is player in radius and not obstructed
-        if (playerDist<=detectionRadius || hit.collider.gameObject == "Player")
+        if (playerDist<=detectionRadius || hit.collider.gameObject.tag == "Player")
         {
             playerDetected = true;
             detectionTimer = detectionTimerValue;
         }
-        //timer for enemy remembering player
+        //timer for enemy remembering players
         else if(detectionTimer > 0f){
-            detectionTimer -= detectionTimer.deltaTime
+            detectionTimer -= Time.deltaTime;
         }
         //enemy loses player detection
         else

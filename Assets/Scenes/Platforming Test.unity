@@ -1168,10 +1168,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alive: {fileID: 580201824}
+  player: {fileID: 443244833}
   aliveRB: {fileID: 580201828}
   animator: {fileID: 580201825}
   floorCheck: {fileID: 935362499}
   wallCheck: {fileID: 337322165}
+  playerCheckPos: {fileID: 0}
   knockBackSpeed: {x: 10, y: 5}
   floorLayer:
     serializedVersion: 2
@@ -1185,6 +1187,8 @@ MonoBehaviour:
   maxHealth: 30
   knockbackDuration: 0.1
   behaviourTimerValue: 3
+  detectionRadius: 5
+  detectionTimerValue: 5
 --- !u!1 &788009789
 GameObject:
   m_ObjectHideFlags: 0
