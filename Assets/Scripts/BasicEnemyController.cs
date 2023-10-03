@@ -18,17 +18,19 @@ public class BasicEnemyController : MonoBehaviour
     //variables
     private State currentState;
     private bool floorDetected, wallDetected, playerDetected;
-    private float currentHealth, knockbackStartTime, behaviourTimer;
+    private float currentHealth, knockbackStartTime, behaviourTimer, detectionTimer;
     private int facingDirection, damageDirection, playerDirection;
 
     private Vector2 movement;
 
     //object references
     [SerializeField] private GameObject alive;
+    [SerializeField] private GameObject player;
     [SerializeField] private Rigidbody2D aliveRB;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private Transform playerCheckPos;
     [SerializeField] private Vector2 knockBackSpeed;
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private LayerMask wallLayer;
@@ -39,6 +41,7 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float knockbackDuration;
     [SerializeField] private float behaviourTimerValue;
     [SerializeField] private float detectionRadius;
+    [SerializeField] private float detectionTimerValue;
 
     //initial state of the enemy
     private void Start()
@@ -76,6 +79,8 @@ public class BasicEnemyController : MonoBehaviour
                 break;
 
         }
+
+        detectPlayer(); // check for player detection
     }
 
     //Idle state
@@ -318,7 +323,28 @@ public class BasicEnemyController : MonoBehaviour
     //function to determine if player has been detected by AI
     private void detectPlayer()
     {
+        //find  distance between player and enemy
+        float playerDist = Vector2.Distance(alive.transform.position, player.transform.position);
 
+        //Raycast to check if player is obstructed
+        RaycastHit2D hit = Physics2D.Linecast(alive.transform.position, player.transform.position - alive.transform.position);
+
+        //is player in radius and not obstructed
+        if (playerDist<=detectionRadius || hit.collider.gameObject == "Player")
+        {
+            playerDetected = true;
+            detectionTimer = detectionTimerValue;
+        }
+        //timer for enemy remembering player
+        else if(detectionTimer > 0f){
+            detectionTimer -= detectionTimer.deltaTime
+        }
+        //enemy loses player detection
+        else
+        {
+            playerDetected = false;
+        }
+        
     }
 
     //Function to visualize raycasts for checks
