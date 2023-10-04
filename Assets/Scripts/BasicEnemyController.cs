@@ -46,6 +46,7 @@ public class BasicEnemyController : MonoBehaviour
     //initial state of the enemy
     private void Start()
     {
+        currentHealth = maxHealth;
         currentState = State.idle;
         behaviourTimer = behaviourTimerValue * 2f;
         playerDetected = false;
@@ -293,8 +294,9 @@ public class BasicEnemyController : MonoBehaviour
     }
 
     //function to take damage
-    private void Damage(float[] attackDetails)
+    public void Damage(float[] attackDetails)
     {
+
         //getting array of values for the attack
         currentHealth -= attackDetails[0];
 
@@ -330,7 +332,7 @@ public class BasicEnemyController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(alive.transform.position, player.transform.position - alive.transform.position);
 
         //is player in radius and not obstructed
-        if (playerDist<=detectionRadius || hit.collider.gameObject.tag == "Player")
+        if (playerDist<=detectionRadius && hit.collider.gameObject.tag == "Player")
         {
             playerDetected = true;
             detectionTimer = detectionTimerValue;

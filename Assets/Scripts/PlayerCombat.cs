@@ -8,7 +8,7 @@ public class PlayerCombat : MonoBehaviour
     //Object references
     [SerializeField] private GameObject parent;
     [SerializeField] private Transform attack1HitboxPos;
-    [SerializeField] private LayerMask damagable;
+    [SerializeField] private LayerMask Damageable;
     [SerializeField] private Rigidbody2D rb;
     public Animator animator;
 
@@ -17,8 +17,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float attack1Radius;
     [SerializeField] private int attack1Damage;
     [SerializeField] public int health, maxHealth, mana, maxMana;
-    [SerializeField]  private bool isAttacking, isFirstAttack, gotInput, combo, attack1, attack2;
-    [SerializeField]  private float lastInputTime;
+    [SerializeField] private bool isAttacking, isFirstAttack, gotInput, combo, attack1, attack2;
+    [SerializeField] private float lastInputTime;
+
+    private float[] attackDetails = new float[2];
 
     private void Start()
     {
@@ -75,11 +77,14 @@ public class PlayerCombat : MonoBehaviour
     private void CheckAttackHitbox()
     {
         //creates a circle collider to check for attack
-        Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitboxPos.position, attack1Radius, damagable);
+        Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitboxPos.position, attack1Radius, Damageable);
+
+        attackDetails[0] = attack1Damage;
+        attackDetails[1] = transform.position.x;
 
         foreach (Collider2D collider in detectedObjects)
         {
-            collider.transform.parent.SendMessage("Damage", attack1Damage);
+           collider.transform.gameObject.SendMessage("Damage", attackDetails);
         }
     }
 

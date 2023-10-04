@@ -932,14 +932,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parent: {fileID: 443244833}
   attack1HitboxPos: {fileID: 1547262409}
-  damagable:
+  Damageable:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   rb: {fileID: 443244835}
   animator: {fileID: 508027717}
   inputTimer: 0.2
   attack1Radius: 1
-  attack1Damage: 10
+  attack1Damage: 25
   health: 0
   maxHealth: 0
   mana: 0
@@ -1167,13 +1167,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c57e3f1f2dc2b4faf826b0ac8f5075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floorDetected: 0
+  wallDetected: 0
+  playerDetected: 0
   alive: {fileID: 580201824}
   player: {fileID: 443244833}
   aliveRB: {fileID: 580201828}
   animator: {fileID: 580201825}
   floorCheck: {fileID: 935362499}
   wallCheck: {fileID: 337322165}
-  playerCheckPos: {fileID: 0}
+  playerCheckPos: {fileID: 443244838}
   knockBackSpeed: {x: 10, y: 5}
   floorLayer:
     serializedVersion: 2
@@ -1184,7 +1187,7 @@ MonoBehaviour:
   floorCheckDistance: 1.75
   wallCheckDistance: 0.75
   movementSpeed: 3
-  maxHealth: 30
+  maxHealth: 75
   knockbackDuration: 0.1
   behaviourTimerValue: 3
   detectionRadius: 5

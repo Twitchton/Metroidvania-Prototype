@@ -127,7 +127,7 @@ AnimatorController:
   m_Name: MushroomMonster
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: KnockBack
+  - m_Name: Knockback
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -270,7 +270,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: KnockBack
+    m_ConditionEvent: Knockback
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2363826735073084370}
