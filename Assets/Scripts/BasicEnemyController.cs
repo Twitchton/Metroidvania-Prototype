@@ -31,6 +31,7 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private Transform playerCheckPos;
+    [SerializeField] private Transform detectionPos;
     [SerializeField] private Vector2 knockBackSpeed;
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private LayerMask wallLayer;
@@ -42,6 +43,7 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float behaviourTimerValue;
     [SerializeField] private float detectionRadius;
     [SerializeField] private float detectionTimerValue;
+    [SerializeField] private float attackRadius;
 
     //initial state of the enemy
     private void Start()
@@ -82,6 +84,27 @@ public class BasicEnemyController : MonoBehaviour
         }
 
         detectPlayer(); // check for player detection
+
+        if (playerDetected && (Vector2.Distance(alive.transform.position, player.transform.position)) <= attackRadius)
+        {
+            SwitchState(State.attacking); //attack if player is in attack range   
+        }
+    }
+
+    private void LateUpdate()
+    {
+        //ensure enemy is facing player
+        if (playerDetected)
+        {
+            if (player.transform.position.x < alive.transform.position.x && facingDirection > 0)
+            {
+                Flip();
+            }
+            if(player.transform.position.x > alive.transform.position.x && facingDirection < 0)
+            {
+                Flip();
+            }
+        }
     }
 
     //Idle state
@@ -92,12 +115,17 @@ public class BasicEnemyController : MonoBehaviour
 
     private void UpdateIdleState()
     {
-        //logic for idlestate when player is detected
-        if (playerDetected)
-        {
+        //floor and wall checking
+        floorDetected = Physics2D.Raycast(floorCheck.position, Vector2.down, floorCheckDistance, floorLayer);
+        wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.right, wallCheckDistance, wallLayer);
 
+        //logic for idlestate when player is detected
+        if (playerDetected && floorDetected && wallDetected)
+        {
+            SwitchState(State.running);
         }
 
+        //Idle Timer logic
         if(behaviourTimer <= 0f)
         {
             SwitchState(State.running);
@@ -326,10 +354,10 @@ public class BasicEnemyController : MonoBehaviour
     private void detectPlayer()
     {
         //find  distance between player and enemy
-        float playerDist = Vector2.Distance(alive.transform.position, player.transform.position);
+        float playerDist = Vector2.Distance(detectionPos.position, player.transform.position);
 
         //Raycast to check if player is obstructed
-        RaycastHit2D hit = Physics2D.Raycast(alive.transform.position, player.transform.position - alive.transform.position);
+        RaycastHit2D hit = Physics2D.Raycast(detectionPos.position, player.transform.position - detectionPos.position);
 
         //is player in radius and not obstructed
         if (playerDist<=detectionRadius && hit.collider.gameObject.tag == "Player")
@@ -357,5 +385,8 @@ public class BasicEnemyController : MonoBehaviour
 
         //wall check
         Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
+        
+        //detection radius
+        Gizmos.DrawWireSphere(detectionPos.position, detectionRadius);
     }
 }
