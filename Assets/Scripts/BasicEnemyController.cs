@@ -17,8 +17,9 @@ public class BasicEnemyController : MonoBehaviour
 
     //variables
     private State currentState;
-    [SerializeField] private bool floorDetected, wallDetected, playerDetected;
+    [SerializeField] private bool floorDetected, wallDetected, playerDetected, canFlip;
     private float currentHealth, knockbackStartTime, behaviourTimer, detectionTimer;
+    private float[] attackDetails = new float[2];
     private int facingDirection, damageDirection, playerDirection;
 
     private Vector2 movement;
@@ -32,9 +33,11 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private Transform wallCheck;
     [SerializeField] private Transform playerCheckPos;
     [SerializeField] private Transform detectionPos;
+    [SerializeField] private Transform attackHitboxPos;
     [SerializeField] private Vector2 knockBackSpeed;
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask Player;
     [SerializeField] private float floorCheckDistance;
     [SerializeField] private float wallCheckDistance;
     [SerializeField] private float movementSpeed;
@@ -44,6 +47,8 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float detectionRadius;
     [SerializeField] private float detectionTimerValue;
     [SerializeField] private float attackRadius;
+    [SerializeField] private float attackDamage;
+    
 
     //initial state of the enemy
     private void Start()
@@ -52,6 +57,7 @@ public class BasicEnemyController : MonoBehaviour
         currentState = State.idle;
         behaviourTimer = behaviourTimerValue * 2f;
         playerDetected = false;
+        canFlip = true;
         facingDirection = 1;
     }
 
@@ -85,7 +91,7 @@ public class BasicEnemyController : MonoBehaviour
 
         detectPlayer(); // check for player detection
 
-        if (playerDetected && (Vector2.Distance(alive.transform.position, player.transform.position)) <= attackRadius)
+        if (playerDetected && (Vector2.Distance(attackHitboxPos.position, player.transform.position)) <= attackRadius)
         {
             SwitchState(State.attacking); //attack if player is in attack range   
         }
@@ -120,9 +126,15 @@ public class BasicEnemyController : MonoBehaviour
         wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.right, wallCheckDistance, wallLayer);
 
         //logic for idlestate when player is detected
-        if (playerDetected && floorDetected && wallDetected)
+        if (playerDetected && floorDetected && !wallDetected)
         {
             SwitchState(State.running);
+        }
+
+        //timer if player isn't detected
+        if (!playerDetected)
+        {
+            behaviourTimer -= Time.deltaTime;
         }
 
         //Idle Timer logic
@@ -130,7 +142,6 @@ public class BasicEnemyController : MonoBehaviour
         {
             SwitchState(State.running);
         }
-        behaviourTimer -= Time.deltaTime;
     }
 
     private void ExitIdleState()
@@ -202,7 +213,7 @@ public class BasicEnemyController : MonoBehaviour
     //Attacking state
     private void EnterAttackingState()
     {
-
+        animator.SetBool("Attacking", true);
     }
 
     private void UpdateAttackingState()
@@ -212,7 +223,7 @@ public class BasicEnemyController : MonoBehaviour
 
     private void ExitAttackingState()
     {
-
+        animator.SetBool("Attacking", false);
     }
 
     //Knockback state
@@ -315,20 +326,24 @@ public class BasicEnemyController : MonoBehaviour
     private void Flip()
     {
         //flips sprite by changing it's local transform
-        facingDirection *= -1;
-        Vector3 localScale = alive.transform.localScale;
-        localScale.x *= -1f;
-        alive.transform.localScale = localScale;
+        if (canFlip)
+        {
+            facingDirection *= -1;
+            Vector3 localScale = alive.transform.localScale;
+            localScale.x *= -1f;
+            alive.transform.localScale = localScale;
+        }
+        
     }
 
     //function to take damage
-    public void Damage(float[] attackDetails)
+    public void Damage(float[] damageDetails)
     {
 
         //getting array of values for the attack
         currentHealth -= attackDetails[0];
 
-        if (attackDetails[1] > alive.transform.position.x)
+        if (damageDetails[1] > alive.transform.position.x)
         {
             damageDirection = -1;
         }
@@ -377,6 +392,33 @@ public class BasicEnemyController : MonoBehaviour
         
     }
 
+    //function to check hitboxes for landing attacks
+    private void CheckAttackHitbox()
+    {
+        //creates a circle collider to check for player hitboxes
+        Collider2D[] detectedPlayer = Physics2D.OverlapCircleAll(attackHitboxPos.position, attackRadius, Player);
+
+        attackDetails[0] = attackDamage;
+        attackDetails[1] = transform.position.x;
+
+        foreach (Collider2D collider in detectedPlayer)
+        {
+            collider.transform.gameObject.SendMessage("Damage", attackDetails);
+        }
+    }
+
+    //function to disable flip while attacking
+    public void disableFlip()
+    {
+        canFlip = false;
+    } 
+
+    //function to re-enable flip after attack
+    public void enableFlip()
+    {
+        canFlip = true;
+    }
+
     //Function to visualize raycasts for checks
     private void OnDrawGizmos()
     {
@@ -388,5 +430,8 @@ public class BasicEnemyController : MonoBehaviour
         
         //detection radius
         Gizmos.DrawWireSphere(detectionPos.position, detectionRadius);
+
+        //attack radius
+        Gizmos.DrawWireSphere(attackHitboxPos.position, attackRadius);
     }
 }

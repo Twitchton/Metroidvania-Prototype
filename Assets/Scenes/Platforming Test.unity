@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 351329972}
   - component: {fileID: 351329971}
   - component: {fileID: 351329974}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 443244835}
   - component: {fileID: 443244840}
   - component: {fileID: 443244839}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -822,7 +822,7 @@ GameObject:
   - component: {fileID: 508027716}
   - component: {fileID: 508027717}
   - component: {fileID: 508027718}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -960,7 +960,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 528472253}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FloorCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1092,6 +1092,7 @@ Transform:
   - {fileID: 935362499}
   - {fileID: 337322165}
   - {fileID: 1657732743}
+  - {fileID: 905747895}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &580201828
@@ -1171,6 +1172,7 @@ MonoBehaviour:
   floorDetected: 0
   wallDetected: 0
   playerDetected: 0
+  canFlip: 0
   alive: {fileID: 580201824}
   player: {fileID: 443244833}
   aliveRB: {fileID: 580201828}
@@ -1179,6 +1181,7 @@ MonoBehaviour:
   wallCheck: {fileID: 337322165}
   playerCheckPos: {fileID: 443244838}
   detectionPos: {fileID: 1657732743}
+  attackHitboxPos: {fileID: 905747895}
   knockBackSpeed: {x: 10, y: 5}
   floorLayer:
     serializedVersion: 2
@@ -1186,6 +1189,9 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
+  Player:
+    serializedVersion: 2
+    m_Bits: 512
   floorCheckDistance: 1.75
   wallCheckDistance: 0.75
   movementSpeed: 3
@@ -1194,7 +1200,8 @@ MonoBehaviour:
   behaviourTimerValue: 3
   detectionRadius: 5
   detectionTimerValue: 5
-  attackRadius: 0
+  attackRadius: 1
+  attackDamage: 30
 --- !u!1 &788009789
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,7 +1211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 788009790}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1225,6 +1232,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 443244838}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &905747894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 905747895}
+  m_Layer: 8
+  m_Name: attackHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &905747895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905747894}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.75, y: -0.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 580201827}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &935362498
 GameObject:
@@ -1430,7 +1468,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1547262409}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Attack1Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1607,7 +1645,7 @@ Transform:
   m_GameObject: {fileID: 1657732742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.79, y: 0, z: 0}
+  m_LocalPosition: {x: 0.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
