@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement: MonoBehaviour
 {
     //object references
+    [SerializeField] private GameObject combat;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Transform wallCheck;
@@ -181,4 +182,12 @@ public class PlayerMovement: MonoBehaviour
     {
         canFlip = true;
     }
+
+    //function that passes damage to player combat
+    private void Damage(float[] damageDetails)
+    {
+        combat.GetComponent<PlayerCombat>().Damage(damageDetails);
+    }
+
+
 }

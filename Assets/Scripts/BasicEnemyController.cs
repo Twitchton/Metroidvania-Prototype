@@ -341,7 +341,7 @@ public class BasicEnemyController : MonoBehaviour
     {
 
         //getting array of values for the attack
-        currentHealth -= attackDetails[0];
+        currentHealth -= damageDetails[0];
 
         if (damageDetails[1] > alive.transform.position.x)
         {

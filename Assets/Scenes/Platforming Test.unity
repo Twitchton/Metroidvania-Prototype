@@ -664,6 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852f18b69656e944ea51b0ebffbfc967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combat: {fileID: 508027714}
   rb: {fileID: 443244835}
   floorCheck: {fileID: 528472253}
   wallCheck: {fileID: 788009790}
@@ -930,27 +931,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2de8df7de95b40459c4199e27ac8bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 443244833}
+  movement: {fileID: 443244833}
   attack1HitboxPos: {fileID: 1547262409}
   Damageable:
     serializedVersion: 2
     m_Bits: 256
   rb: {fileID: 443244835}
+  playerInput: {fileID: 443244840}
   animator: {fileID: 508027717}
   inputTimer: 0.2
   attack1Radius: 1
   attack1Damage: 25
-  health: 0
-  maxHealth: 0
-  mana: 0
-  maxMana: 0
-  isAttacking: 0
-  isFirstAttack: 0
-  gotInput: 0
-  combo: 0
-  attack1: 0
-  attack2: 0
   lastInputTime: 0
+  maxHealth: 100
+  maxMana: 100
+  invincibilityDuration: 2
+  knockbackSpeed: {x: 0, y: 0}
+  health: 0
+  mana: 0
 --- !u!1 &528472252
 GameObject:
   m_ObjectHideFlags: 0
