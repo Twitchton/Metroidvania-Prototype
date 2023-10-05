@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     //Object references
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject movement;
     [SerializeField] private Transform attack1HitboxPos;
     [SerializeField] private LayerMask Damageable;
@@ -155,7 +156,8 @@ public class PlayerCombat : MonoBehaviour
     //function that handles player losing all their health
     private void death()
     {
-        Destroy(movement); //destroys the parent game object that handles movement
+        gameManager.endGame("You Lose!");
+        //Destroy(movement); //destroys the parent game object that handles movement
     }
 
     //function that handles getting knockback from a hit
@@ -205,6 +207,11 @@ public class PlayerCombat : MonoBehaviour
     public void enableFlip()
     {
         movement.GetComponent<PlayerMovement>().enableFlip();
+    }
+
+    public float getHealth()
+    {
+        return health;
     }
 
 }

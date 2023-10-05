@@ -25,6 +25,7 @@ public class BasicEnemyController : MonoBehaviour
     private Vector2 movement;
 
     //object references
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject alive;
     [SerializeField] private GameObject player;
     [SerializeField] private Rigidbody2D aliveRB;
@@ -252,6 +253,7 @@ public class BasicEnemyController : MonoBehaviour
     private void EnterDeadState() 
     {
         //play death animation
+        gameManager.enemyKilled();
         Destroy(gameObject);
     }
 
