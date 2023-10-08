@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BasicEnemyController : MonoBehaviour
 {
+    [SerializeField]
     private enum State
     {
         idle,
@@ -100,22 +101,16 @@ public class BasicEnemyController : MonoBehaviour
     private void LateUpdate()
     {
         //ensure enemy is facing player
-        if (playerDetected)
+        if (playerDetected && !facingPlayer() && currentState != State.attacking && IsOnLevel())
         {
-            if (player.transform.position.x < alive.transform.position.x && facingDirection > 0)
-            {
-                Flip();
-            }
-            if(player.transform.position.x > alive.transform.position.x && facingDirection < 0)
-            {
-                Flip();
-            }
+            Flip();
         }
     }
 
     //Idle state
     private void EnterIdleState()
     {
+        behaviourTimer = Random.Range(behaviourTimerValue / 2f, behaviourTimerValue) * 2f;
         animator.SetBool("Idle", true);
     }
 
@@ -123,12 +118,15 @@ public class BasicEnemyController : MonoBehaviour
     {
         //floor and wall checking
         floorDetected = Physics2D.Raycast(floorCheck.position, Vector2.down, floorCheckDistance, floorLayer);
-        wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.right, wallCheckDistance, wallLayer);
+        wallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, wallLayer);
 
         //logic for idlestate when player is detected
-        if (playerDetected && floorDetected && !wallDetected)
+        if (playerDetected)
         {
-            SwitchState(State.running);
+            if (floorDetected && !wallDetected && facingPlayer() && IsOnLevel())
+            {
+                SwitchState(State.running);
+            }
         }
 
         //timer if player isn't detected
@@ -146,14 +144,13 @@ public class BasicEnemyController : MonoBehaviour
 
     private void ExitIdleState()
     {
-        //setting timer for other behaviours from random value
-        behaviourTimer = Random.Range(behaviourTimerValue / 2f, behaviourTimerValue);
         animator.SetBool("Idle", false);
     }
 
     //Running state
     private void EnterRunningState()
     {
+        behaviourTimer = Random.Range(behaviourTimerValue / 2f, behaviourTimerValue);
         animator.SetBool("Running", true);
     }
     
@@ -161,7 +158,7 @@ public class BasicEnemyController : MonoBehaviour
     {
         //checks for blocks (gaps or walls)
         floorDetected = Physics2D.Raycast(floorCheck.position, Vector2.down, floorCheckDistance, floorLayer);
-        wallDetected = Physics2D.Raycast(wallCheck.right, Vector2.right, wallCheckDistance, wallLayer);
+        wallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, wallLayer);
 
         //check if path is impeded
         if (!floorDetected || wallDetected)
@@ -202,9 +199,7 @@ public class BasicEnemyController : MonoBehaviour
     }
 
     private void ExitRunningState()
-    {
-        //setting longer timer for idle state
-        behaviourTimer = Random.Range(behaviourTimerValue/ 2f, behaviourTimerValue)*2f;
+    {  
         movement.Set(0f, 0f);
         aliveRB.velocity = movement;
         animator.SetBool("Running", false);
@@ -224,6 +219,7 @@ public class BasicEnemyController : MonoBehaviour
     private void ExitAttackingState()
     {
         animator.SetBool("Attacking", false);
+        canFlip = true;
     }
 
     //Knockback state
@@ -430,9 +426,46 @@ public class BasicEnemyController : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
         
         //detection radius
-        Gizmos.DrawWireSphere(detectionPos.position, detectionRadius);
+        //Gizmos.DrawWireSphere(detectionPos.position, detectionRadius);
 
         //attack radius
-        Gizmos.DrawWireSphere(attackHitboxPos.position, attackRadius);
+        //Gizmos.DrawWireSphere(attackHitboxPos.position, attackRadius);
+    }
+
+    //function to check if monster is facing the player;
+    private bool facingPlayer()
+    {
+        bool facingPlayer;
+        if ((int)player.transform.position.x >= alive.transform.position.x && facingDirection == 1)
+        {
+            facingPlayer = true;
+        }
+        else if (player.transform.position.x <= alive.transform.position.x && facingDirection == -1)
+        {
+            facingPlayer = true;
+        }
+        else
+        {
+            facingPlayer = false;
+        }
+
+        return facingPlayer;
+    }
+
+    //function for checking if the player is on the same level as the AI
+    private bool IsOnLevel()
+    {
+        bool isOnLevel;
+
+        if(player.transform.position.y >= (alive.transform.position.y - 3) && player.transform.position.y <= (alive.transform.position.y + 3))
+        {
+            isOnLevel = true;
+        }
+        else
+        {
+            isOnLevel = false;
+        }
+
+        return isOnLevel;
     }
 }
