@@ -426,10 +426,10 @@ public class BasicEnemyController : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
         
         //detection radius
-        //Gizmos.DrawWireSphere(detectionPos.position, detectionRadius);
+        Gizmos.DrawWireSphere(detectionPos.position, detectionRadius);
 
         //attack radius
-        //Gizmos.DrawWireSphere(attackHitboxPos.position, attackRadius);
+        Gizmos.DrawWireSphere(attackHitboxPos.position, attackRadius);
     }
 
     //function to check if monster is facing the player;

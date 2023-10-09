@@ -83,7 +83,7 @@ public class PlayerMovement: MonoBehaviour
 
     private void WallSlide()
     {
-        if (IsWalled() && !Isfloored() && horizontal !=0f)
+        if (IsWalled() && !Isfloored() && horizontal !=0f && rb.velocity.y < 0f)
         {
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue)); ;
@@ -110,7 +110,7 @@ public class PlayerMovement: MonoBehaviour
             wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
         }
 
-        if (context.performed && wallJumpingCounter > 0f)
+        if (context.performed && wallJumpingCounter > 0f && !Isfloored())
         {
             isWallJumping = true;
             rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
