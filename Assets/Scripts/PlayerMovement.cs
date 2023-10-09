@@ -45,7 +45,7 @@ public class PlayerMovement: MonoBehaviour
         }
         
 
-        if (Isfloored() || IsWalled())
+        if (IsFloored() || IsWalled())
         {
             airJump = true;
         }
@@ -64,7 +64,7 @@ public class PlayerMovement: MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //floored check
-        if (context.performed && Isfloored())
+        if (context.performed && IsFloored())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
@@ -83,7 +83,7 @@ public class PlayerMovement: MonoBehaviour
 
     private void WallSlide()
     {
-        if (IsWalled() && !Isfloored() && horizontal !=0f && rb.velocity.y < 0f)
+        if (IsWalled() && !IsFloored() && horizontal !=0f && rb.velocity.y < 0f)
         {
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue)); ;
@@ -97,6 +97,12 @@ public class PlayerMovement: MonoBehaviour
 
     public void WallJump(InputAction.CallbackContext context)
     {
+        //check to see if attack animation needs to be cancelled
+        if (combat.GetComponent<PlayerCombat>().getAttack())
+        {
+            combat.GetComponent<PlayerCombat>().FinishAttack1();
+        }
+
         if (isWallSliding)
         {
             isWallJumping = false;
@@ -110,7 +116,7 @@ public class PlayerMovement: MonoBehaviour
             wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
         }
 
-        if (context.performed && wallJumpingCounter > 0f && !Isfloored())
+        if (context.performed && wallJumpingCounter > 0f && !IsFloored())
         {
             isWallJumping = true;
             rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
@@ -132,7 +138,7 @@ public class PlayerMovement: MonoBehaviour
     }
 
     //checks if player is touching the floor
-    private bool Isfloored()
+    public bool IsFloored()
     {
         return Physics2D.OverlapCircle(floorCheck.position, 0.2f, floorLayer);
     }
@@ -169,6 +175,7 @@ public class PlayerMovement: MonoBehaviour
         animator.SetFloat("HorizontalSpeed", Mathf.Abs(rb.velocity.x));
         animator.SetFloat("VerticalVelocity", rb.velocity.y);
         animator.SetBool("IsWallSliding", isWallSliding);
+        animator.SetBool("IsFloored", IsFloored());
     }
 
     //method to lock the ability to flip (used for attacks)

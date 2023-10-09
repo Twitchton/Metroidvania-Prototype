@@ -31,6 +31,7 @@ public class PlayerCombat : MonoBehaviour
     private bool isAttacking, isFirstAttack, gotInput, attack1, invincible;
     private int damageDirection;
 
+    //function called on load
     private void Start()
     {
         lastInputTime = Mathf.NegativeInfinity;
@@ -42,6 +43,7 @@ public class PlayerCombat : MonoBehaviour
         invincibilityTimer = 0f;
     }
 
+    //function called each frame
     private void Update()
     {
 
@@ -81,7 +83,7 @@ public class PlayerCombat : MonoBehaviour
         if (gotInput)
         {
             //perform attack1
-            if (!isAttacking)
+            if (!isAttacking && movement.GetComponent<PlayerMovement>())
             {
                 gotInput = false;
                 isAttacking = true;
@@ -115,11 +117,12 @@ public class PlayerCombat : MonoBehaviour
     }
 
     //resets booleans for Attack
-    private void FinishAttack1()
+    public void FinishAttack1()
     {
         isAttacking = false;
         animator.SetBool("IsAttacking", isAttacking);
         animator.SetBool("Attack1", false);
+
     }
 
     //function to take damage
@@ -163,6 +166,7 @@ public class PlayerCombat : MonoBehaviour
     //function that handles getting knockback from a hit
     private void knockback()
     {
+        FinishAttack1();
 
         invincible = true;
         invincibilityTimer = invincibilityDuration;
@@ -209,9 +213,16 @@ public class PlayerCombat : MonoBehaviour
         movement.GetComponent<PlayerMovement>().enableFlip();
     }
 
+    //method that returns the player health
     public float getHealth()
     {
         return health;
+    }
+
+    //returns if the player is attacking
+    public bool getAttack()
+    {
+        return isAttacking;
     }
 
 }
