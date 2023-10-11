@@ -45,7 +45,7 @@ public class PlayerMovement: MonoBehaviour
         }
         
 
-        if (IsFloored() || IsWalled())
+        if (IsFloored() || isWallSliding)
         {
             airJump = true;
         }
