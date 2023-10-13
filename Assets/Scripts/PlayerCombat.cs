@@ -63,14 +63,14 @@ public class PlayerCombat : MonoBehaviour
     //function for catching inputs from player.
     public void AttackAction(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !gameManager.getPaused())
         {
             gotInput = true;
             lastInputTime = Time.time;
             //attempt combat
         }
 
-        if (context.canceled)
+        if (context.canceled && !gameManager.getPaused())
         {
             gotInput = false;
         }

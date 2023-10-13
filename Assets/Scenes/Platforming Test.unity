@@ -1954,6 +1954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852f18b69656e944ea51b0ebffbfc967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 1682868287}
   combat: {fileID: 508027714}
   rb: {fileID: 443244835}
   floorCheck: {fileID: 528472253}

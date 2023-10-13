@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement: MonoBehaviour
 {
     //object references
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject combat;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform floorCheck;
@@ -63,21 +64,23 @@ public class PlayerMovement: MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        //floored check
-        if (context.performed && IsFloored())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-        }
-        else if (context.performed && !isWallJumping && !isWallSliding && airJump)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            airJump = false;
-        }
+        if (!gameManager.getPaused()) {
+            //floored check
+            if (context.performed && IsFloored())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            }
+            else if (context.performed && !isWallJumping && !isWallSliding && airJump)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+                airJump = false;
+            }
 
-        //action ended early
-        if (context.canceled && rb.velocity.y > 0f)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            //action ended early
+            if (context.canceled && rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            }
         }
     }
 
@@ -97,38 +100,40 @@ public class PlayerMovement: MonoBehaviour
 
     public void WallJump(InputAction.CallbackContext context)
     {
-        //check to see if attack animation needs to be cancelled
-        if (combat.GetComponent<PlayerCombat>().getAttack())
-        {
-            combat.GetComponent<PlayerCombat>().FinishAttack1();
-        }
-
-        if (isWallSliding)
-        {
-            isWallJumping = false;
-            wallJumpingDirection = -transform.localScale.x; //jumpiing in oposite direction of player character
-            wallJumpingCounter = wallJumpingTime;
-
-            CancelInvoke(nameof(StopWallJumping));//return ability to wall jump
-        }
-        else
-        {
-            wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
-        }
-
-        if (context.performed && wallJumpingCounter > 0f && !IsFloored())
-        {
-            isWallJumping = true;
-            rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
-            wallJumpingCounter = 0;
-
-            if (transform.localScale.x != wallJumpingDirection)
+        if (!gameManager.getPaused()) { 
+            //check to see if attack animation needs to be cancelled
+            if (combat.GetComponent<PlayerCombat>().getAttack())
             {
-                Flip();
+                combat.GetComponent<PlayerCombat>().FinishAttack1();
             }
-        }
 
-        Invoke(nameof(StopWallJumping), wallJumpingDuration);//remove ability to wall jump
+            if (isWallSliding)
+            {
+                isWallJumping = false;
+                wallJumpingDirection = -transform.localScale.x; //jumpiing in oposite direction of player character
+                wallJumpingCounter = wallJumpingTime;
+
+                CancelInvoke(nameof(StopWallJumping));//return ability to wall jump
+            }
+            else
+            {
+                wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
+            }
+
+            if (context.performed && wallJumpingCounter > 0f && !IsFloored())
+            {
+                isWallJumping = true;
+                rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+                wallJumpingCounter = 0;
+
+                if (transform.localScale.x != wallJumpingDirection)
+                {
+                    Flip();
+                }
+            }
+
+            Invoke(nameof(StopWallJumping), wallJumpingDuration);//remove ability to wall jump
+        }
     }
 
     //function to reset wall jumping
@@ -167,7 +172,10 @@ public class PlayerMovement: MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        horizontal = context.ReadValue<Vector2>().x;
+        if (!gameManager.getPaused())
+        {
+            horizontal = context.ReadValue<Vector2>().x;
+        }
     }
 
     private void animateMovement()

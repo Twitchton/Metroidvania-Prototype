@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEditor.Build;
 
 public class GameManager : MonoBehaviour
 {
@@ -120,5 +121,11 @@ public class GameManager : MonoBehaviour
     private float getHealth()
     {
         return playerCombat.GetComponent<PlayerCombat>().getHealth();
+    }
+
+    //function that returns the pause state of the game controller.
+    public bool getPaused()
+    {
+        return paused;
     }
 }
