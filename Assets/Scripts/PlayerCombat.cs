@@ -77,7 +77,7 @@ public class PlayerCombat : MonoBehaviour
         }
 
         //checks to see is there's a mismatch in animation and boolean for dashing
-        if (dashCheck && !animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        if (dashCheck && !animator.GetCurrentAnimatorStateInfo(0).IsName("Dash NoDust"))
         {
             EndDash();
         }
