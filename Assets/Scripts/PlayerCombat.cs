@@ -7,11 +7,12 @@ public class PlayerCombat : MonoBehaviour
 {
     //Object references
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject movement;
+    [SerializeField] private PlayerMovement movement;
+    [SerializeField] private GameObject player;
     [SerializeField] private Transform attack1HitboxPos;
     [SerializeField] private LayerMask Damageable;
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private PlayerInput playerMovementInput;
     public Animator animator;
 
     //Open Variables
@@ -22,13 +23,15 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float maxHealth;
     [SerializeField] private float maxMana;
     [SerializeField] private float invincibilityDuration;
+    [SerializeField] private float dashCooldown;
     [SerializeField] private Vector2 knockbackSpeed;
+    [SerializeField] private Vector2 dashPower;
 
     //private variables
     private float[] attackDetails = new float[2];
     [SerializeField] private float health, mana;
-    private float invincibilityTimer;
-    private bool isAttacking, isFirstAttack, gotInput, attack1, invincible;
+    private float invincibilityTimer, dashTimer;
+    private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck;
     private int damageDirection;
 
     //function called on load
@@ -41,6 +44,7 @@ public class PlayerCombat : MonoBehaviour
 
         invincible = false;
         invincibilityTimer = 0f;
+        dashTimer = 0f;
     }
 
     //function called each frame
@@ -58,6 +62,25 @@ public class PlayerCombat : MonoBehaviour
         {
             invincible = false;
         }
+
+        if (dashTimer > 0f)
+        {
+            dashTimer -= Time.deltaTime;
+        }
+
+        //checks to see if there's a mismatch in animation playing and boolean for attacking
+        if (attackCheck && !(animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") 
+                         || animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2")
+                         || animator.GetCurrentAnimatorStateInfo(0).IsName("Dash-Attack")))
+        {
+            FinishAttack();
+        }
+
+        //checks to see is there's a mismatch in animation and boolean for dashing
+        if (dashCheck && !animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        {
+            EndDash();
+        }
     }
 
     //function for catching inputs from player.
@@ -70,11 +93,43 @@ public class PlayerCombat : MonoBehaviour
             //attempt combat
         }
 
-        if (context.canceled && !gameManager.getPaused())
+        if (context.canceled)
         {
             gotInput = false;
         }
 
+    }
+
+    //function to give player a dodge/dash
+    public void Dash(InputAction.CallbackContext context)
+    {
+        if (dashTimer <= 0f)
+        {
+            dashing = true;
+            animator.SetBool("Dashing", dashing);
+            movement.Dash(dashPower);
+            dashTimer = dashCooldown;
+        }
+    }
+
+    //function that ends Dash
+    private void EndDash()
+    {
+        //checks if player is still invincible from iframes
+        if (invincible)
+        {
+            invincible = false;
+        }
+
+        dashing = false;
+        dashCheck = false;
+        animator.SetBool("Dashing", dashing);
+        movement.endDash();
+    }
+
+    private void DashCheck()
+    {
+        dashCheck = true;
     }
 
     //handles logic for the attacks
@@ -83,7 +138,7 @@ public class PlayerCombat : MonoBehaviour
         if (gotInput)
         {
             //perform attack1
-            if (!isAttacking && movement.GetComponent<PlayerMovement>())
+            if (!isAttacking)
             {
                 gotInput = false;
                 isAttacking = true;
@@ -99,6 +154,11 @@ public class PlayerCombat : MonoBehaviour
         {
             //wait for new input
         }
+    }
+
+    private void AttackCheck()
+    {
+        attackCheck = true;
     }
 
     //check hitbox for landing attack
@@ -117,11 +177,34 @@ public class PlayerCombat : MonoBehaviour
     }
 
     //resets booleans for Attack
-    public void FinishAttack1()
+    public void FinishAttack()
     {
+        enableMovement();
+
+        attackCheck = false;
         isAttacking = false;
+        isFirstAttack = false;
         animator.SetBool("IsAttacking", isAttacking);
-        animator.SetBool("Attack1", false);
+
+        if (attack1)
+        {
+            attack1 = false;
+            animator.SetBool("Attack1", attack1);
+        }
+
+        if (attack2)
+        {
+            attack2 = false;
+            animator.SetBool("Attack2", attack2);
+        }
+
+        if (dashAttack)
+        {
+            dashAttack = false;
+            animator.SetBool("DashAttack", dashAttack);
+        }
+
+
 
     }
 
@@ -133,7 +216,7 @@ public class PlayerCombat : MonoBehaviour
             //getting array of values for the attack
             health -= damageDetails[0];
 
-            if (damageDetails[1] > movement.transform.position.x)
+            if (damageDetails[1] > player.transform.position.x)
             {
                 damageDirection = -1;
             }
@@ -166,7 +249,7 @@ public class PlayerCombat : MonoBehaviour
     //function that handles getting knockback from a hit
     private void knockback()
     {
-        FinishAttack1();
+        FinishAttack();
 
         invincible = true;
         invincibilityTimer = invincibilityDuration;
@@ -174,43 +257,42 @@ public class PlayerCombat : MonoBehaviour
         animator.SetBool("Knockback", true);
 
         rb.velocity = new Vector2(knockbackSpeed.x * damageDirection, knockbackSpeed.y);
-        disableControls();
+        disableMovement();
     }
 
+    //Function that ends the knockback state for the player;
     private void endKnockback()
     {
         animator.SetBool("Knockback", false);
-        enableControls();
+        enableMovement();
     }
 
     //disables the player controls
-    private void disableControls()
+    private void disableMovement()
     {
-        playerInput.enabled = false;
+        playerMovementInput.enabled = false;
     }
 
     //enables player controls
-    private void enableControls()
+    private void enableMovement()
     {
-        playerInput.enabled = true;
+        playerMovementInput.enabled = true;
+    }
+
+    private void makeInvincible()
+    {
+        invincible = true;
+    }
+
+    private void endInvincible()
+    {
+        invincible = false;
     }
 
     //Visualizeses attack radius
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attack1HitboxPos.position, attack1Radius);
-    }
-
-    //function that calls the disable flip function 
-    public void disableFlip()
-    {
-        movement.GetComponent<PlayerMovement>().disableFlip();
-    }
-
-    //function that calls the disable flip function 
-    public void enableFlip()
-    {
-        movement.GetComponent<PlayerMovement>().enableFlip();
     }
 
     //method that returns the player health

@@ -1,0 +1,54 @@
+{
+    "name": "PlayerCombatInput",
+    "maps": [
+        {
+            "name": "PlayerCombat",
+            "id": "397481d6-37b2-4627-965b-990cc281b930",
+            "actions": [
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "eabf04b4-2eb0-4e89-8032-e72605e1a38e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "bbc8afb8-e26e-4b3f-a4ef-046b4298f612",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5aa91488-bbc4-49c2-ab36-4e40494c818e",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "81bd58ad-12cf-4fcb-8257-957b0ab27afe",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

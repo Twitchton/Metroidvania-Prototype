@@ -5,7 +5,7 @@ public class PlayerMovement: MonoBehaviour
 {
     //object references
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private GameObject combat;
+    [SerializeField] private PlayerCombat combat;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Transform wallCheck;
@@ -20,6 +20,11 @@ public class PlayerMovement: MonoBehaviour
     private bool isFacingRight = true;
     private bool airJump = false;
     private bool canFlip = true;
+
+    //dash variables
+    private bool dashed = false;
+    private float dashCounter;
+    private float dashDuration;
 
     //wall sliding variables
     private bool isWallSliding;
@@ -44,7 +49,6 @@ public class PlayerMovement: MonoBehaviour
         {
             Flip();
         }
-        
 
         if (IsFloored() || isWallSliding)
         {
@@ -56,7 +60,7 @@ public class PlayerMovement: MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isWallJumping)
+        if (!isWallJumping && !dashed)
         {
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
@@ -64,7 +68,9 @@ public class PlayerMovement: MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (!gameManager.getPaused()) {
+        //checks that the game is not paused and that the player isn't attacking
+        if (!gameManager.getPaused() && !combat.getAttack()) {
+
             //floored check
             if (context.performed && IsFloored())
             {
@@ -100,12 +106,8 @@ public class PlayerMovement: MonoBehaviour
 
     public void WallJump(InputAction.CallbackContext context)
     {
-        if (!gameManager.getPaused()) { 
-            //check to see if attack animation needs to be cancelled
-            if (combat.GetComponent<PlayerCombat>().getAttack())
-            {
-                combat.GetComponent<PlayerCombat>().FinishAttack1();
-            }
+        //checks that the game is not paused and that the player isn't attacking
+        if (!gameManager.getPaused() && !combat.getAttack()) { 
 
             if (isWallSliding)
             {
@@ -142,6 +144,20 @@ public class PlayerMovement: MonoBehaviour
         isWallJumping = false;
     }
 
+    //function that implements player Dash
+    public void Dash(Vector2 dashPower) 
+    {
+        dashed = true;
+        float dashDirection = transform.localScale.x;
+        rb.velocity = new Vector2(dashDirection * dashPower.x, dashPower.y);
+    }
+
+    //function that ends a dash
+    public void endDash()
+    {
+        dashed = false;
+    }
+
     //checks if player is touching the floor
     public bool IsFloored()
     {
@@ -166,12 +182,12 @@ public class PlayerMovement: MonoBehaviour
                 localScale.x *= -1f;
                 transform.localScale = localScale;
             }
-        }
-        
+        }  
     }
 
     public void Move(InputAction.CallbackContext context)
     {
+        //checks that the game is not paused and that the player isn't attacking
         if (!gameManager.getPaused())
         {
             horizontal = context.ReadValue<Vector2>().x;
@@ -201,7 +217,7 @@ public class PlayerMovement: MonoBehaviour
     //function that passes damage to player combat
     private void Damage(float[] damageDetails)
     {
-        combat.GetComponent<PlayerCombat>().Damage(damageDetails);
+        combat.Damage(damageDetails);
     }
 
 
