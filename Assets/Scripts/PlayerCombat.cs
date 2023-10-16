@@ -29,7 +29,7 @@ public class PlayerCombat : MonoBehaviour
 
     //private variables
     private float[] attackDetails = new float[2];
-    [SerializeField] private float health, mana;
+    [SerializeField] private float health, mana, gravityScale;
     private float invincibilityTimer, dashTimer;
     [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck;
     private int damageDirection;
@@ -58,7 +58,7 @@ public class PlayerCombat : MonoBehaviour
             invincibilityTimer -= Time.deltaTime;
         }
 
-        if (invincibilityTimer <= 0f)
+        if (invincibilityTimer <= 0f && !dashing)
         {
             invincible = false;
         }
@@ -105,6 +105,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (dashTimer <= 0f)
         {
+            gravityScale = rb.gravityScale;
+            rb.gravityScale = 0f;
             dashing = true;
             animator.SetBool("Dashing", dashing);
             movement.Dash(dashPower);
@@ -115,12 +117,9 @@ public class PlayerCombat : MonoBehaviour
     //function that ends Dash
     private void EndDash()
     {
-        //checks if player is still invincible from iframes
-        if (invincible)
-        {
-            invincible = false;
-        }
+        EnableEnemeyCollisions();
 
+        rb.gravityScale = gravityScale;
         dashing = false;
         dashCheck = false;
         animator.SetBool("Dashing", dashing);
@@ -279,13 +278,17 @@ public class PlayerCombat : MonoBehaviour
         playerMovementInput.enabled = true;
     }
 
-    private void makeInvincible()
+    //disables player collisions with enemies
+    private void DisableEnemeyCollisions()
     {
+        Physics2D.IgnoreLayerCollision(9, 8, true);
         invincible = true;
     }
 
-    private void endInvincible()
+    //enables player collisions with enemies
+    private void EnableEnemeyCollisions()
     {
+        Physics2D.IgnoreLayerCollision(9, 8, false);
         invincible = false;
     }
 
