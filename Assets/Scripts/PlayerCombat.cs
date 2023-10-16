@@ -31,7 +31,7 @@ public class PlayerCombat : MonoBehaviour
     private float[] attackDetails = new float[2];
     [SerializeField] private float health, mana;
     private float invincibilityTimer, dashTimer;
-    private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck;
     private int damageDirection;
 
     //function called on load

@@ -2380,13 +2380,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1682868287}
   movement: {fileID: 443244839}
-  player: {fileID: 0}
+  player: {fileID: 443244833}
   attack1HitboxPos: {fileID: 1547262409}
   Damageable:
     serializedVersion: 2
     m_Bits: 256
   rb: {fileID: 443244835}
-  playerMovementInput: {fileID: 0}
+  playerMovementInput: {fileID: 443244840}
   animator: {fileID: 508027717}
   inputTimer: 0.2
   attack1Radius: 1
@@ -2400,6 +2400,16 @@ MonoBehaviour:
   dashPower: {x: 20, y: 0}
   health: 0
   mana: 0
+  isAttacking: 0
+  attackCheck: 0
+  isFirstAttack: 0
+  gotInput: 0
+  attack1: 0
+  attack2: 0
+  dashAttack: 0
+  invincible: 0
+  dashing: 0
+  dashCheck: 0
 --- !u!114 &508027719
 MonoBehaviour:
   m_ObjectHideFlags: 0
