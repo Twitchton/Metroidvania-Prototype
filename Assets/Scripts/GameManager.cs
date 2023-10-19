@@ -15,12 +15,13 @@ public class GameManager : MonoBehaviour
     //object References
     [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject endScreen;
+    [SerializeField] private GameObject controlsScreen;
     [SerializeField] private TextMeshProUGUI endText;
 
     //variables
     public Image healthBar;
     public GameObject playerCombat;
-    private bool paused, ended;
+    private bool paused, ended, controls;
     [SerializeField] private int numEnemies;
     private int deadCount;
 
@@ -34,6 +35,9 @@ public class GameManager : MonoBehaviour
 
         pauseScreen.SetActive(false);
         endScreen.SetActive(false);
+        controlsScreen.SetActive(false);
+
+        controls = false;
     }
 
     // Update is called once per frame
@@ -57,7 +61,14 @@ public class GameManager : MonoBehaviour
     //function to take InputAction to pause
     private void pauseGame(InputAction.CallbackContext context)
     {
-        Pause();
+        if (controls)
+        {
+            ControlMenu();
+        }
+        else
+        {
+            Pause();
+        } 
     }
 
     //function that pauses the game
@@ -127,5 +138,13 @@ public class GameManager : MonoBehaviour
     public bool getPaused()
     {
         return paused;
+    }
+
+    //function that toggles the control menu during pause.
+    public void ControlMenu()
+    {
+        controls = !controls;
+        controlsScreen.SetActive(controls);
+        pauseScreen.SetActive(!controls);
     }
 }
