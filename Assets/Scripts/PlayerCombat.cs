@@ -31,7 +31,7 @@ public class PlayerCombat : MonoBehaviour
     private float[] attackDetails = new float[2];
     [SerializeField] private float health, mana, gravityScale;
     private float invincibilityTimer, dashTimer;
-    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, waitForAnim;
     private int damageDirection;
 
     //function called on load
@@ -45,6 +45,8 @@ public class PlayerCombat : MonoBehaviour
         invincible = false;
         invincibilityTimer = 0f;
         dashTimer = 0f;
+
+        waitForAnim = false;
     }
 
     //function called each frame
@@ -178,11 +180,12 @@ public class PlayerCombat : MonoBehaviour
     //resets booleans for Attack
     public void FinishAttack()
     {
+        isFirstAttack = false;
+
         enableMovement();
 
         attackCheck = false;
         isAttacking = false;
-        isFirstAttack = false;
         animator.SetBool("IsAttacking", isAttacking);
 
         if (attack1)
@@ -202,8 +205,6 @@ public class PlayerCombat : MonoBehaviour
             dashAttack = false;
             animator.SetBool("DashAttack", dashAttack);
         }
-
-
 
     }
 
@@ -308,6 +309,11 @@ public class PlayerCombat : MonoBehaviour
     public bool getAttack()
     {
         return isAttacking;
+    }
+
+    private void CancalWait()
+    {
+        waitForAnim = false;
     }
 
 }
