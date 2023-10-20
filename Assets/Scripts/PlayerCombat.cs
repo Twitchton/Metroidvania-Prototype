@@ -95,7 +95,7 @@ public class PlayerCombat : MonoBehaviour
             //attempt combat
         }
 
-        if (context.canceled)
+        if (context.canceled && !gameManager.getPaused())
         {
             gotInput = false;
         }
@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
     //function to give player a dodge/dash
     public void Dash(InputAction.CallbackContext context)
     {
-        if (dashTimer <= 0f)
+        if (dashTimer <= 0f && !gameManager.getPaused())
         {
             gravityScale = rb.gravityScale;
             rb.gravityScale = 0f;
