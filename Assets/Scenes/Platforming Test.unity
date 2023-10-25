@@ -2202,7 +2202,7 @@ MonoBehaviour:
   speed: 8
   jumpingPower: 16
   wallSlidingSpeed: 1
-  wallJumpingTime: 2
+  wallJumpingTime: 0.1
   wallJumpingDuration: 0.35
   wallJumpingPower: {x: 12, y: 16}
 --- !u!114 &443244840
@@ -2250,7 +2250,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 443244839}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: Jump
+        m_MethodName: WallJump
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2262,7 +2262,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 443244839}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: WallJump
+        m_MethodName: Jump
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

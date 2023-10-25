@@ -55,6 +55,20 @@ public class PlayerMovement: MonoBehaviour
             airJump = true;
         }
 
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpingCounter = wallJumpingTime;
+
+            CancelInvoke(nameof(StopWallJumping));//return ability to wall jump
+        }
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
+        }
+
+        findWallJumpDiretion();
+
         animateMovement();
     }
 
@@ -104,23 +118,23 @@ public class PlayerMovement: MonoBehaviour
 
     }
 
+    private void findWallJumpDiretion()
+    {
+        if (IsWalled())
+        {
+            wallJumpingDirection = -transform.localScale.x; //jumpiing in oposite direction of player character
+        }
+        else
+        {
+            wallJumpingDirection = transform.localScale.x; //player using cyote time to jmup
+        }
+    }
+
     public void WallJump(InputAction.CallbackContext context)
     {
         //checks that the game is not paused and that the player isn't attacking
         if (!gameManager.getPaused() && !combat.getAttack()) { 
 
-            if (isWallSliding)
-            {
-                isWallJumping = false;
-                wallJumpingDirection = -transform.localScale.x; //jumpiing in oposite direction of player character
-                wallJumpingCounter = wallJumpingTime;
-
-                CancelInvoke(nameof(StopWallJumping));//return ability to wall jump
-            }
-            else
-            {
-                wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
-            }
 
             if (context.performed && wallJumpingCounter > 0f && !IsFloored())
             {
