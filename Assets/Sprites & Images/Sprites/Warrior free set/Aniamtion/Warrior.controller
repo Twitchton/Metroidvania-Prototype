@@ -29,9 +29,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Knockback
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsFloored
-    m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Dashing
     m_EventTreshold: 0
