@@ -24,19 +24,21 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float maxMana;
     [SerializeField] private float invincibilityDuration;
     [SerializeField] private float dashCooldown;
+    [SerializeField] private float directionTime;
     [SerializeField] private Vector2 knockbackSpeed;
     [SerializeField] private Vector2 dashPower;
 
     //private variables
     private float[] attackDetails = new float[2];
     [SerializeField] private float health, mana, gravityScale;
-    private float invincibilityTimer, dashTimer;
-    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, waitForAnim;
+    private float invincibilityTimer, dashTimer, directionTimer;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, waitForAnim, downInput, upInput;
     private int damageDirection;
 
     //function called on load
     private void Start()
     {
+        //setting initial variables
         lastInputTime = Mathf.NegativeInfinity;
 
         health = maxHealth;
@@ -45,8 +47,12 @@ public class PlayerCombat : MonoBehaviour
         invincible = false;
         invincibilityTimer = 0f;
         dashTimer = 0f;
+        directionTimer = 0f;
 
         waitForAnim = false;
+
+        downInput = false;
+        upInput = false;
     }
 
     //function called each frame
@@ -60,6 +66,7 @@ public class PlayerCombat : MonoBehaviour
             invincibilityTimer -= Time.deltaTime;
         }
 
+        //invicibility timer.
         if (invincibilityTimer <= 0f && !dashing)
         {
             invincible = false;
@@ -70,12 +77,15 @@ public class PlayerCombat : MonoBehaviour
             dashTimer -= Time.deltaTime;
         }
 
-        //checks to see if there's a mismatch in animation playing and boolean for attacking
-        if (attackCheck && !(animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") 
-                         || animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2")
-                         || animator.GetCurrentAnimatorStateInfo(0).IsName("Dash-Attack")))
+        if (directionTimer <= 0)
         {
-            FinishAttack();
+            downInput = false;
+            upInput = false;
+        }
+
+        if (directionTimer > 0f)
+        {
+            directionTimer -= Time.deltaTime;
         }
 
         //checks to see is there's a mismatch in animation and boolean for dashing
@@ -100,6 +110,39 @@ public class PlayerCombat : MonoBehaviour
             gotInput = false;
         }
 
+    }
+
+    //gets input for a verticle "up" attack
+    public void UpInput(InputAction.CallbackContext context)
+    {
+        if (context.performed && !gameManager.getPaused())
+        {
+            upInput = true;
+            directionTimer = directionTime;
+
+            if (downInput)
+            {
+                downInput = false;
+            }
+        }
+    }
+
+    //gets input for a verticle "down" attack
+    public void DownInput(InputAction.CallbackContext context)
+    {
+        if (context.performed && !gameManager.getPaused())
+        {
+            if (context.performed && !gameManager.getPaused())
+            {
+                downInput = true;
+                directionTimer = directionTime;
+
+                if (upInput)
+                {
+                    upInput = false;
+                }
+            }
+        }
     }
 
     //function to give player a dodge/dash
@@ -143,17 +186,14 @@ public class PlayerCombat : MonoBehaviour
             {
                 gotInput = false;
                 isAttacking = true;
-                //isFirstAttack = !isFirstAttack;
-                isFirstAttack = true;
-                animator.SetBool("Attack1", true);
-                animator.SetBool("FirstAttack", isFirstAttack);
-                animator.SetBool("IsAttacking", isAttacking);
+                
             }
         }
 
         if (Time.time >= lastInputTime + inputTimer)
         {
             //wait for new input
+            gotInput = false;
         }
     }
 
@@ -175,37 +215,6 @@ public class PlayerCombat : MonoBehaviour
         {
            collider.transform.gameObject.SendMessage("Damage", attackDetails);
         }
-    }
-
-    //resets booleans for Attack
-    public void FinishAttack()
-    {
-        isFirstAttack = false;
-
-        enableMovement();
-
-        attackCheck = false;
-        isAttacking = false;
-        animator.SetBool("IsAttacking", isAttacking);
-
-        if (attack1)
-        {
-            attack1 = false;
-            animator.SetBool("Attack1", attack1);
-        }
-
-        if (attack2)
-        {
-            attack2 = false;
-            animator.SetBool("Attack2", attack2);
-        }
-
-        if (dashAttack)
-        {
-            dashAttack = false;
-            animator.SetBool("DashAttack", dashAttack);
-        }
-
     }
 
     //function to take damage
@@ -249,7 +258,6 @@ public class PlayerCombat : MonoBehaviour
     //function that handles getting knockback from a hit
     private void knockback()
     {
-        FinishAttack();
 
         invincible = true;
         invincibilityTimer = invincibilityDuration;

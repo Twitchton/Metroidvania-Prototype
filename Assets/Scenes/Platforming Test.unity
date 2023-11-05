@@ -2674,6 +2674,7 @@ MonoBehaviour:
   maxMana: 100
   invincibilityDuration: 1
   dashCooldown: 1
+  directionTime: 0
   knockbackSpeed: {x: 10, y: 5}
   dashPower: {x: 20, y: 0}
   health: 0
@@ -2690,6 +2691,8 @@ MonoBehaviour:
   dashing: 0
   dashCheck: 0
   waitForAnim: 0
+  downInput: 0
+  upInput: 0
 --- !u!114 &508027719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2747,6 +2750,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: bbc8afb8-e26e-4b3f-a4ef-046b4298f612
     m_ActionName: PlayerCombat/Dash[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 508027718}
+        m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
+        m_MethodName: UpInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bb48a7ae-bb1d-4371-9dec-97f854f1964c
+    m_ActionName: PlayerCombat/Up[/Keyboard/w]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 508027718}
+        m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
+        m_MethodName: DownInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2ec05199-9405-4699-8cba-707b1b4ef31e
+    m_ActionName: PlayerCombat/Down[/Keyboard/s]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerCombat
@@ -8052,7 +8087,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: To Jump press the 'Space' key or the 'W' key.
+  m_text: To Jump press the 'Space' key.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

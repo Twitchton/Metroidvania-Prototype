@@ -83,7 +83,7 @@ public class PlayerMovement: MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //checks that the game is not paused and that the player isn't attacking
-        if (!gameManager.getPaused() && !combat.getAttack()) {
+        if (!gameManager.getPaused()) {
 
             //floored check
             if (context.performed && IsFloored())
@@ -133,7 +133,7 @@ public class PlayerMovement: MonoBehaviour
     public void WallJump(InputAction.CallbackContext context)
     {
         //checks that the game is not paused and that the player isn't attacking
-        if (!gameManager.getPaused() && !combat.getAttack()) { 
+        if (!gameManager.getPaused()) { 
 
 
             if (context.performed && wallJumpingCounter > 0f && !IsFloored())
