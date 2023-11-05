@@ -8,17 +8,14 @@ public class PlayerCombat : MonoBehaviour
     //Object references
     [SerializeField] private GameManager gameManager;
     [SerializeField] private PlayerMovement movement;
+    [SerializeField] private Weapon weapon;
     [SerializeField] private GameObject player;
-    [SerializeField] private Transform attack1HitboxPos;
-    [SerializeField] private LayerMask Damageable;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private PlayerInput playerMovementInput;
     public Animator animator;
 
     //Open Variables
     [SerializeField] private float inputTimer; //timing to fudge attack time
-    [SerializeField] private float attack1Radius;
-    [SerializeField] private float attack1Damage;
     [SerializeField] private float lastInputTime;
     [SerializeField] private float maxHealth;
     [SerializeField] private float maxMana;
@@ -29,10 +26,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Vector2 dashPower;
 
     //private variables
-    private float[] attackDetails = new float[2];
+    
     [SerializeField] private float health, mana, gravityScale;
     private float invincibilityTimer, dashTimer, directionTimer;
-    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, waitForAnim, downInput, upInput;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput;
     private int damageDirection;
 
     //function called on load
@@ -48,8 +45,6 @@ public class PlayerCombat : MonoBehaviour
         invincibilityTimer = 0f;
         dashTimer = 0f;
         directionTimer = 0f;
-
-        waitForAnim = false;
 
         downInput = false;
         upInput = false;
@@ -185,7 +180,8 @@ public class PlayerCombat : MonoBehaviour
             if (!isAttacking)
             {
                 gotInput = false;
-                isAttacking = true;
+
+                weapon.Attack(upInput, downInput);
                 
             }
         }
@@ -197,25 +193,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void AttackCheck()
-    {
-        attackCheck = true;
-    }
-
-    //check hitbox for landing attack
-    private void CheckAttackHitbox()
-    {
-        //creates a circle collider to check for attack
-        Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attack1HitboxPos.position, attack1Radius, Damageable);
-
-        attackDetails[0] = attack1Damage;
-        attackDetails[1] = transform.position.x;
-
-        foreach (Collider2D collider in detectedObjects)
-        {
-           collider.transform.gameObject.SendMessage("Damage", attackDetails);
-        }
-    }
+    
 
     //function to take damage
     public void Damage(float[] damageDetails)
@@ -301,12 +279,6 @@ public class PlayerCombat : MonoBehaviour
         invincible = false;
     }
 
-    //Visualizeses attack radius
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attack1HitboxPos.position, attack1Radius);
-    }
-
     //method that returns the player health
     public float getHealth()
     {
@@ -317,11 +289,6 @@ public class PlayerCombat : MonoBehaviour
     public bool getAttack()
     {
         return isAttacking;
-    }
-
-    private void CancalWait()
-    {
-        waitForAnim = false;
     }
 
 }
