@@ -6,7 +6,8 @@ using UnityEngine.Android;
 public class Weapon : MonoBehaviour
 {
     //object reference
-    [SerializeField] GameObject character;
+    [SerializeField] private GameObject character;
+    [SerializeField] private PlayerCombat source;
     [SerializeField] private LayerMask Damageable;
     [SerializeField] private Transform attackHitboxPos;
     [SerializeField] private Transform upAttackHitboxPos;
@@ -18,7 +19,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float attack1Radius;
     [SerializeField] private float attack1Damage;
 
-    private bool up, down;
+    private bool up, down, cancel;
     
 
     // Start is called before the first frame update
@@ -26,36 +27,44 @@ public class Weapon : MonoBehaviour
     {
         up = false;
         down = false;
+        cancel = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        up = source.getUp();
+        down = source.getDown();
+
+        if (up && down)
+        {
+            cancel = true;
+        }
+        else cancel = false;
     }
 
     //function that starts an attack
-    public void Attack(bool up, bool down)
+    public void Attack()
     {
         if (up)
         {
             this.up = up;
             gameObject.transform.position = upAttackHitboxPos.position;
-            gameObject.transform.eulerAngles = new Vector3(0, 0, 90);
+            
         }
         else if (down)
         {
             this.down = down;
             gameObject.transform.position = downAttackHitboxPos.position;
-            gameObject.transform.eulerAngles = new Vector3(0, 0, -90);
+            
         }
         else
         {
             gameObject.transform.position = attackHitboxPos.position;
-            gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+            
         }
 
-        attackAnim.SetBool("attack", true);
+        animateAttack();
     }
 
     //check hitbox for landing attack
@@ -87,13 +96,22 @@ public class Weapon : MonoBehaviour
             collider.transform.gameObject.SendMessage("Damage", attackDetails);
         }
 
-        up = false;
-        down = false;
+    }
+
+    private void animateAttack()
+    {
+        attackAnim.SetBool("attack", true);
+        attackAnim.SetBool("up", up);
+        attackAnim.SetBool("down", down);
+        attackAnim.SetBool("cancel", cancel);
     }
 
     private void EndAttack()
     {
         attackAnim.SetBool("attack", false);
+        attackAnim.SetBool("up", false);
+        attackAnim.SetBool("down", false);
+        attackAnim.SetBool("cancel", false);
     }
 
     //Visualizeses attack radius

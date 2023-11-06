@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: string
+  m_Name: Attack
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 2013588988, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
+      value: {fileID: -1581169430, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
     - time: 0.083333336
-      value: {fileID: 229498558, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
+      value: {fileID: 1617928023, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
     - time: 0.16666667
-      value: {fileID: -710617341, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
+      value: {fileID: -1591139426, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
     - time: 0.25
-      value: {fileID: -184127396, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
+      value: {fileID: -123455897, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,10 +50,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 2013588988, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
-    - {fileID: 229498558, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
-    - {fileID: -710617341, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
-    - {fileID: -184127396, guid: ac438421e2e5f0547bb29e7cfef4f8c9, type: 3}
+    - {fileID: -1581169430, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
+    - {fileID: 1617928023, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
+    - {fileID: -1591139426, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
+    - {fileID: -123455897, guid: 6e60a111274f7e54ca0fec700ecc3653, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -78,4 +78,18 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.083333336
+    functionName: CheckAttackHitbox
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: EndAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

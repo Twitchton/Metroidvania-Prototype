@@ -114,11 +114,6 @@ public class PlayerCombat : MonoBehaviour
         {
             upInput = true;
             directionTimer = directionTime;
-
-            if (downInput)
-            {
-                downInput = false;
-            }
         }
     }
 
@@ -127,16 +122,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (context.performed && !gameManager.getPaused())
         {
-            if (context.performed && !gameManager.getPaused())
-            {
-                downInput = true;
-                directionTimer = directionTime;
-
-                if (upInput)
-                {
-                    upInput = false;
-                }
-            }
+            downInput = true;
+            directionTimer = directionTime;
         }
     }
 
@@ -181,7 +168,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 gotInput = false;
 
-                weapon.Attack(upInput, downInput);
+                weapon.Attack();
                 
             }
         }
@@ -289,6 +276,18 @@ public class PlayerCombat : MonoBehaviour
     public bool getAttack()
     {
         return isAttacking;
+    }
+
+    //method to access up input
+    public bool getUp()
+    {
+        return upInput;
+    }
+
+    //method to access down input
+    public bool getDown()
+    {
+        return downInput;
     }
 
 }
