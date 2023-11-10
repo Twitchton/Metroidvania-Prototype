@@ -12,8 +12,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Walls
-  - Floor
+  - Level
+  - 
   - Damageable
   - Player
   - 
@@ -44,6 +44,15 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Level
+    uniqueID: 1073822031
+    locked: 0
+  - name: Objects
+    uniqueID: 1709071253
+    locked: 0
+  - name: Enemies
+    uniqueID: 1901675437
     locked: 0
   - name: Player
     uniqueID: 450248535

@@ -9,8 +9,7 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform floorCheck;
     [SerializeField] private Transform wallCheck;
-    [SerializeField] private LayerMask floorLayer;
-    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask levelLayer;
     public Animator animator;
 
     //movement variables
@@ -175,13 +174,13 @@ public class PlayerMovement: MonoBehaviour
     //checks if player is touching the floor
     public bool IsFloored()
     {
-        return Physics2D.OverlapCircle(floorCheck.position, 0.2f, floorLayer);
+        return Physics2D.OverlapCircle(floorCheck.position, 0.2f, levelLayer);
     }
 
     //checks if player is touching a wall
     private bool IsWalled()
     {
-        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, levelLayer);
     }
 
     //function to flip the player sprite
