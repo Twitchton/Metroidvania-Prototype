@@ -11274,7 +11274,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 11
-      m_TileSpriteIndex: 11
+      m_TileSpriteIndex: 23
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -21677,8 +21677,8 @@ Tilemap:
     m_Data: {fileID: -1406206647, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
   - m_RefCount: 6
     m_Data: {fileID: -520609342, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: -763618350, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 1036071584, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
   - m_RefCount: 49
@@ -21701,8 +21701,8 @@ Tilemap:
     m_Data: {fileID: 458444461, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
   - m_RefCount: 4
     m_Data: {fileID: -486001282, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: -763618350, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: -1418330085, guid: ba13d9fbcacc0a948893f8164fb811e1, type: 3}
   - m_RefCount: 3
@@ -22604,7 +22604,7 @@ PrefabInstance:
       objectReference: {fileID: 1682868287}
     - target: {fileID: 3522500222965062986, guid: 7341d840971d8de4eb2a71f8c10a224e, type: 3}
       propertyPath: floorLayer.m_Bits
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 6375333273810226391, guid: 7341d840971d8de4eb2a71f8c10a224e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25001,7 +25001,7 @@ PrefabInstance:
       objectReference: {fileID: 1682868287}
     - target: {fileID: 3522500222965062986, guid: 7341d840971d8de4eb2a71f8c10a224e, type: 3}
       propertyPath: floorLayer.m_Bits
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 6375333273810226391, guid: 7341d840971d8de4eb2a71f8c10a224e, type: 3}
       propertyPath: m_LocalPosition.x
