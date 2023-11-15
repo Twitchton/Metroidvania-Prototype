@@ -233,5 +233,9 @@ public class PlayerMovement: MonoBehaviour
         combat.Damage(damageDetails);
     }
 
-
+    //accessor method for wall sliding bool
+    public bool GetWallSliding()
+    {
+        return isWallSliding;
+    }
 }

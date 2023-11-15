@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float attack1Radius;
     [SerializeField] private float attack1Damage;
 
-    private bool up, down, cancel;
+    private bool up, down;
     
 
     // Start is called before the first frame update
@@ -27,20 +27,14 @@ public class Weapon : MonoBehaviour
     {
         up = false;
         down = false;
-        cancel = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //getting bools for up/down
         up = source.getUp();
         down = source.getDown();
-
-        if (up && down)
-        {
-            cancel = true;
-        }
-        else cancel = false;
     }
 
     //function that starts an attack
@@ -48,13 +42,11 @@ public class Weapon : MonoBehaviour
     {
         if (up)
         {
-            this.up = up;
             gameObject.transform.position = upAttackHitboxPos.position;
             
         }
         else if (down)
         {
-            this.down = down;
             gameObject.transform.position = downAttackHitboxPos.position;
             
         }
@@ -100,18 +92,9 @@ public class Weapon : MonoBehaviour
 
     private void animateAttack()
     {
-        attackAnim.SetBool("attack", true);
+        attackAnim.SetTrigger("attack");
         attackAnim.SetBool("up", up);
         attackAnim.SetBool("down", down);
-        attackAnim.SetBool("cancel", cancel);
-    }
-
-    private void EndAttack()
-    {
-        attackAnim.SetBool("attack", false);
-        attackAnim.SetBool("up", false);
-        attackAnim.SetBool("down", false);
-        attackAnim.SetBool("cancel", false);
     }
 
     //Visualizeses attack radius

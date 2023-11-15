@@ -29,7 +29,7 @@ public class PlayerCombat : MonoBehaviour
     
     [SerializeField] private float health, mana, gravityScale;
     private float invincibilityTimer, dashTimer, directionTimer;
-    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput, timerOn;
     private int damageDirection;
 
     //function called on load
@@ -48,6 +48,8 @@ public class PlayerCombat : MonoBehaviour
 
         downInput = false;
         upInput = false;
+
+        timerOn = false;
     }
 
     //function called each frame
@@ -56,23 +58,26 @@ public class PlayerCombat : MonoBehaviour
 
         CheckAttacks();
 
+        //timer counting down for invincibility
         if(invincibilityTimer > 0f)
         {
             invincibilityTimer -= Time.deltaTime;
         }
 
-        //invicibility timer.
+        //invincibility toggle
         if (invincibilityTimer <= 0f && !dashing)
         {
             invincible = false;
         }
 
+        //timer for dash cooldown
         if (dashTimer > 0f)
         {
             dashTimer -= Time.deltaTime;
         }
 
-        if (directionTimer <= 0)
+
+        if (directionTimer <= 0 && timerOn)
         {
             downInput = false;
             upInput = false;
@@ -93,7 +98,7 @@ public class PlayerCombat : MonoBehaviour
     //function for catching inputs from player.
     public void AttackAction(InputAction.CallbackContext context)
     {
-        if (context.performed && !gameManager.getPaused())
+        if (context.performed && !gameManager.getPaused() && !movement.GetWallSliding())
         {
             gotInput = true;
             lastInputTime = Time.time;
@@ -112,7 +117,14 @@ public class PlayerCombat : MonoBehaviour
     {
         if (context.performed && !gameManager.getPaused())
         {
+            timerOn = false;
+            downInput = false;
             upInput = true;
+        }
+
+        if (context.canceled && !gameManager.getPaused())
+        {
+            timerOn = true;
             directionTimer = directionTime;
         }
     }
@@ -122,7 +134,14 @@ public class PlayerCombat : MonoBehaviour
     {
         if (context.performed && !gameManager.getPaused())
         {
+            timerOn = false;
+            upInput = false;
             downInput = true;
+        }
+
+        if (context.canceled && !gameManager.getPaused())
+        {
+            timerOn = true;
             directionTimer = directionTime;
         }
     }
