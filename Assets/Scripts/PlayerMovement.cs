@@ -5,6 +5,7 @@ public class PlayerMovement: MonoBehaviour
 {
     //object references
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject character;
     [SerializeField] private PlayerCombat combat;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform floorCheck;
@@ -27,6 +28,7 @@ public class PlayerMovement: MonoBehaviour
 
     //wall sliding variables
     private bool isWallSliding;
+    private float characterPos;
     [SerializeField] private float wallSlidingSpeed = 1f;
 
     //wall jumping
@@ -39,6 +41,13 @@ public class PlayerMovement: MonoBehaviour
 
     //animation variables
 
+    //function called the first frame
+    private void Start()
+    {
+        characterPos = character.transform.localPosition.x;
+    }
+
+    //function called every frame
     void Update()
     {
         WallSlide();
@@ -56,6 +65,8 @@ public class PlayerMovement: MonoBehaviour
 
         if (isWallSliding)
         {
+            character.transform.localPosition = new Vector3(0.9f, character.transform.localPosition.y, character.transform.localPosition.y); //position change to fix wall slide visual
+
             isWallJumping = false;
             wallJumpingCounter = wallJumpingTime;
 
@@ -63,6 +74,7 @@ public class PlayerMovement: MonoBehaviour
         }
         else
         {
+            character.transform.localPosition = new Vector3(characterPos, character.transform.localPosition.y, character.transform.localPosition.y); //sets back to original position
             wallJumpingCounter -= Time.deltaTime; //allows player to wall jump for a little time after wall sliding
         }
 

@@ -1754,6 +1754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1682868287}
+  character: {fileID: 508027714}
   combat: {fileID: 508027718}
   rb: {fileID: 443244835}
   floorCheck: {fileID: 528472253}
