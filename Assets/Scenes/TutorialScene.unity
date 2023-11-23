@@ -2273,10 +2273,10 @@ MonoBehaviour:
   maxHealth: 100
   maxMana: 100
   invincibilityDuration: 1
-  dashCooldown: 1
+  dashCooldown: 0.75
   directionTime: 0.15
   knockbackSpeed: {x: 10, y: 5}
-  dashPower: {x: 20, y: 0}
+  dashPower: {x: 23, y: 0}
   health: 0
   mana: 0
   gravityScale: 0
@@ -2287,7 +2287,7 @@ MonoBehaviour:
   attack1: 1
   attack2: 0
   dashAttack: 0
-  invincible: 0
+  invincible: 1
   dashing: 0
   dashCheck: 0
   downInput: 0
