@@ -149,7 +149,7 @@ public class PlayerCombat : MonoBehaviour
     //function to give player a dodge/dash
     public void Dash(InputAction.CallbackContext context)
     {
-        if (dashTimer <= 0f && !gameManager.getPaused())
+        if (dashTimer <= 0f && !gameManager.getPaused() && context.performed)
         {
             gravityScale = rb.gravityScale;
             rb.gravityScale = 0f;
@@ -307,6 +307,11 @@ public class PlayerCombat : MonoBehaviour
     public bool getDown()
     {
         return downInput;
+    }
+
+    public bool getDash()
+    {
+        return dashing;
     }
 
 }

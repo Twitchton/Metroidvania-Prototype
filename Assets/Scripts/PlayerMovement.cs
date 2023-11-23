@@ -94,7 +94,7 @@ public class PlayerMovement: MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         //checks that the game is not paused and that the player isn't attacking
-        if (!gameManager.getPaused()) {
+        if (!gameManager.getPaused() && !combat.getDash()) {
 
             //floored check
             if (context.performed && IsFloored())
