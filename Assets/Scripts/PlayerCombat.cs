@@ -26,11 +26,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Vector2 dashPower;
 
     //private variables
-    
-    [SerializeField] private float health, mana, gravityScale;
-    private float invincibilityTimer, dashTimer, directionTimer;
-    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput, timerOn;
-    private int damageDirection;
+    [SerializeField] private float health, mana, gravityScale, attackCooldown;
+    [SerializeField] private float invincibilityTimer, dashTimer, directionTimer, attackTimer;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput, timerOn, attackOn;
+    [SerializeField] private int damageDirection, attackCount, comboMax;
 
     //function called on load
     private void Start()
@@ -50,6 +49,11 @@ public class PlayerCombat : MonoBehaviour
         upInput = false;
 
         timerOn = false;
+
+        //max attack variables
+        attackCount = 0;
+        attackTimer = 0f;
+        attackOn = true;
     }
 
     //function called each frame
@@ -76,7 +80,7 @@ public class PlayerCombat : MonoBehaviour
             dashTimer -= Time.deltaTime;
         }
 
-
+        //directional cooldown
         if (directionTimer <= 0 && timerOn)
         {
             downInput = false;
@@ -87,6 +91,25 @@ public class PlayerCombat : MonoBehaviour
         {
             directionTimer -= Time.deltaTime;
         }
+
+        //maximum attacks handling
+        if (attackCount >= comboMax && attackOn)
+        {
+            attackOn = false;
+            attackTimer = attackCooldown;
+        }
+
+        if (attackTimer > 0f)
+        {
+            attackTimer -= Time.deltaTime;
+        }
+
+        if (attackTimer <=0f)
+        {
+            attackCount = 0;
+            attackOn = true;
+        }
+
 
         //checks to see is there's a mismatch in animation and boolean for dashing
         if (dashCheck && !animator.GetCurrentAnimatorStateInfo(0).IsName("Dash NoDust"))
@@ -183,12 +206,12 @@ public class PlayerCombat : MonoBehaviour
         if (gotInput)
         {
             //perform attack1
-            if (!isAttacking)
+            if (!isAttacking && attackOn)
             {
                 gotInput = false;
-
                 weapon.Attack();
-                
+                attackCount++;
+                attackTimer = attackCooldown;
             }
         }
 
