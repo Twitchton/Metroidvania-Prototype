@@ -249,13 +249,18 @@ public class BasicEnemyController : MonoBehaviour
         movement.Set(knockBackSpeed.x * damageDirection, knockBackSpeed.y);
         aliveRB.velocity = movement;
         animator.SetBool("Knockback", true);
+
+        if (currentHealth <= 0.0f)
+        {
+            SwitchState(State.dead);
+        }
     }
 
     private void UpdateKnockbackState()
     {
         if (Time.time >= knockbackStartTime + knockbackDuration)
         {
-            SwitchState(State.running);
+            SwitchState(State.running);    
         }
     }
 
@@ -268,13 +273,12 @@ public class BasicEnemyController : MonoBehaviour
     private void EnterDeadState() 
     {
         //play death animation
-        gameManager.enemyKilled();
-        Destroy(gameObject);
+        animator.SetBool("IsDead", true);
     }
 
     private void UpdateDeadState()
     {
-
+            
     }
 
     private void ExitDeadState()
@@ -371,15 +375,8 @@ public class BasicEnemyController : MonoBehaviour
 
         //hit particle can be added here
 
-        //checks what state needs to be transitioned to
-        if (currentHealth > 0.0f)
-        {
-            SwitchState(State.knockback);
-        }
-        else
-        {
-            SwitchState(State.dead);
-        }
+        SwitchState(State.knockback);
+        
     }
 
     //function to determine if player has been detected by AI
@@ -494,5 +491,11 @@ public class BasicEnemyController : MonoBehaviour
         }
 
         return isOnLevel;
+    }
+
+    public void removeEnemy()
+    {
+        gameManager.enemyKilled();
+        Destroy(gameObject);
     }
 }
