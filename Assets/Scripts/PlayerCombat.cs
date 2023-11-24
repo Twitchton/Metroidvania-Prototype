@@ -14,6 +14,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private PlayerInput playerMovementInput;
     public Animator animator;
 
+    //PlayerCombat Sounds
+    [SerializeField] private AudioSource playerSound;
+    [SerializeField] private AudioClip playerHurt;
+
     //Open Variables
     [SerializeField] private float inputTimer; //timing to fudge attack time
     [SerializeField] private float lastInputTime;
@@ -229,6 +233,10 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!invincible)
         {
+            //play damage sound
+            playerSound.clip = playerHurt;
+            playerSound.Play();
+            
             //getting array of values for the attack
             health -= damageDetails[0];
 

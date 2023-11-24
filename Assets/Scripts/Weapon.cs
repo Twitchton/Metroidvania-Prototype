@@ -14,6 +14,11 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform downAttackHitboxPos;
     [SerializeField] private Animator attackAnim;
 
+    //attack sounds
+    [SerializeField] private AudioSource playerSound;
+    [SerializeField] private AudioClip attackHit;
+    [SerializeField] private AudioClip attackMiss;
+
     //variables
     private float[] attackDetails = new float[2];
     [SerializeField] private float attack1Radius;
@@ -80,6 +85,17 @@ public class Weapon : MonoBehaviour
         //creates a circle collider to check for attack
         Collider2D[] detectedObjects = Physics2D.OverlapCircleAll(attackHitbox.position, attack1Radius, Damageable);
 
+        if (detectedObjects.Length > 0)
+        {
+            playerSound.clip = attackHit;
+        }
+        else
+        {
+            playerSound.clip = attackMiss;
+        }
+
+        playerSound.Play();
+        
         attackDetails[0] = attack1Damage;
         attackDetails[1] = character.transform.position.x;
 

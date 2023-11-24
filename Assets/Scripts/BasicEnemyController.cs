@@ -17,7 +17,7 @@ public class BasicEnemyController : MonoBehaviour
 
     //variables
     private State currentState;
-    [SerializeField] private bool floorDetected, wallDetected, playerDetected, canFlip;
+    private bool floorDetected, wallDetected, playerDetected, canFlip;
     private float currentHealth, knockbackStartTime, behaviourTimer, detectionTimer;
     private float[] attackDetails = new float[2];
     private int facingDirection, damageDirection, playerDirection;
@@ -39,6 +39,8 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private LayerMask floorLayer;
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask Player;
+
+    //setable variables
     [SerializeField] private float floorCheckDistance;
     [SerializeField] private float wallCheckDistance;
     [SerializeField] private float movementSpeed;
@@ -49,7 +51,13 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float detectionTimerValue;
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackDamage;
-    
+
+    //sound objects
+    [SerializeField] private AudioSource enemySound;
+    [SerializeField] private AudioClip enemyIdle;
+    [SerializeField] private AudioClip enemyDetection;
+    [SerializeField] private AudioClip enemyAggro;
+
 
     //initial state of the enemy
     private void Start()
@@ -91,6 +99,18 @@ public class BasicEnemyController : MonoBehaviour
         }
 
         detectPlayer(); // check for player detection
+
+        //playing sounds
+        if (!playerDetected && !enemySound.isPlaying)
+        {
+            enemySound.clip = enemyIdle;
+            enemySound.Play();
+        }
+        else if (playerDetected && !enemySound.isPlaying)
+        {
+            enemySound.clip = enemyAggro;
+            enemySound.Play();
+        }
 
         if (playerDetected && (Vector2.Distance(attackHitboxPos.position, player.transform.position)) <= attackRadius)
         {
@@ -374,6 +394,13 @@ public class BasicEnemyController : MonoBehaviour
         //is player in radius and not obstructed
         if (playerDist<=detectionRadius && hit.collider.gameObject.tag == "Player")
         {
+            //playing detection sound if getting detected
+            if (!playerDetected)
+            {
+                enemySound.clip = enemyDetection;
+                enemySound.Play();
+            }
+
             playerDetected = true;
             detectionTimer = detectionTimerValue;
         }
