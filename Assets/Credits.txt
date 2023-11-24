@@ -1,0 +1,17 @@
+Grpahics:
+1. Warrior Free Asset (Main character) - CLEMBOD
+2. Monsters_Creatures_Fantasy (Mushroom Monster) - Luiz Melo
+3. Multi Platformer Tileset (Backgrounds & Terrain) - Shackhal
+4. Free Small Slash FX - Sagak Art (Pururu)
+
+UI:
+1. Fantasy Wooden GUI (InLevel UI background) -  Black Hammer
+2. Free Ui Pack (Healthbar) - Valley Land Games
+3. Simple Keys (Button Prompts) - beamedeighth
+4. DungeonFont (Writtin font) - vrtxrry
+
+SFX & Music:
+1. Mysterious Forest - SoulProdMusic
+2. Zombie Attack (Enemy sounds) - Pixabay
+3. Slash (no hit) - 666HeroHero
+4. Sword sound 2 (sword hit) - Pixabay
