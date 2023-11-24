@@ -51,6 +51,7 @@ public class BasicEnemyController : MonoBehaviour
     [SerializeField] private float detectionTimerValue;
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackDamage;
+    [SerializeField] private float contactDamage;
 
     //sound objects
     [SerializeField] private AudioSource enemySound;
@@ -493,9 +494,25 @@ public class BasicEnemyController : MonoBehaviour
         return isOnLevel;
     }
 
+    //function that removes the enemy from the scene
     public void removeEnemy()
     {
         gameManager.enemyKilled();
         Destroy(gameObject);
+    }
+
+    //function to handle contact damage
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //checks if collider is player
+        if (collision.gameObject.tag == "Player")
+        {
+            //sets the damage function input;
+            attackDetails[0] = contactDamage;
+            attackDetails[1] = transform.position.x;
+
+            //sends damage to the player
+            collision.transform.gameObject.SendMessage("Damage", attackDetails);
+        }
     }
 }

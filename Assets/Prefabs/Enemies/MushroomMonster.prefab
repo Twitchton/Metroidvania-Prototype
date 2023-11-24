@@ -218,6 +218,7 @@ MonoBehaviour:
   detectionTimerValue: 5
   attackRadius: 1
   attackDamage: 10
+  contactDamage: 5
   enemySound: {fileID: 3605320487809299025}
   enemyIdle: {fileID: 8300000, guid: 7be6e5d3de7157a4ab3512c0ffa4d643, type: 3}
   enemyDetection: {fileID: 8300000, guid: 25f6862369afa184cabbf9528e229b4d, type: 3}
