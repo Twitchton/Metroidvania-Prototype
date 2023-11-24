@@ -117,6 +117,7 @@ public class BasicEnemyController : MonoBehaviour
         {
             SwitchState(State.attacking); //attack if player is in attack range   
         }
+
     }
 
     private void LateUpdate()
@@ -144,7 +145,7 @@ public class BasicEnemyController : MonoBehaviour
         //logic for idlestate when player is detected
         if (playerDetected)
         {
-            if (floorDetected && !wallDetected && facingPlayer() && IsOnLevel())
+            if (floorDetected && !wallDetected && IsOnLevel())
             {
                 SwitchState(State.running);
             }
@@ -377,7 +378,15 @@ public class BasicEnemyController : MonoBehaviour
         //hit particle can be added here
 
         SwitchState(State.knockback);
-        
+
+        //alerts enemy of player
+        if (!playerDetected)
+        {
+            playerDetected = true;
+
+            enemySound.clip = enemyDetection;
+            enemySound.Play();
+        }
     }
 
     //function to determine if player has been detected by AI
@@ -513,6 +522,15 @@ public class BasicEnemyController : MonoBehaviour
 
             //sends damage to the player
             collision.transform.gameObject.SendMessage("Damage", attackDetails);
+
+            //detects player if contacted
+            if (!playerDetected)
+            {
+                playerDetected = true;
+
+                enemySound.clip = enemyDetection;
+                enemySound.Play();
+            }
         }
     }
 }
