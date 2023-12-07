@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         showHealth();
-        objectiveText.text = "Kill enemies: " + (numEnemies - deadCount) + " enemies remaining";
+        objectiveText.text = "Kill Enemies: " + (numEnemies - deadCount) + " Enemies Remaining";
     }
 
     //input start
