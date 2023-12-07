@@ -345,4 +345,14 @@ public class PlayerCombat : MonoBehaviour
         return dashing;
     }
 
+    public void StartAttacking()
+    {
+        isAttacking = true;
+    }
+
+    public void EndAttacking()
+    {
+        isAttacking = false;
+    }
+
 }

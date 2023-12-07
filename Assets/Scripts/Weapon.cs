@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.Rendering;
 
 public class Weapon : MonoBehaviour
 {
@@ -106,6 +107,7 @@ public class Weapon : MonoBehaviour
 
     }
 
+    //sets parameters for attack animations
     private void animateAttack()
     {
         attackAnim.SetTrigger("attack");
@@ -119,5 +121,17 @@ public class Weapon : MonoBehaviour
         Gizmos.DrawWireSphere(attackHitboxPos.position, attack1Radius);
         Gizmos.DrawWireSphere(upAttackHitboxPos.position, attack1Radius);
         Gizmos.DrawWireSphere(downAttackHitboxPos.position, attack1Radius);
+    }
+
+    //method that updates the player's is attacking variable
+    private void startAttack()
+    {
+        source.StartAttacking();
+    }
+
+    //method that updates the player's is attacking variable
+    private void endAttack()
+    {
+        source.EndAttacking();
     }
 }
