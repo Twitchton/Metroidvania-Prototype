@@ -32,7 +32,7 @@ public class PlayerCombat : MonoBehaviour
     //private variables
     [SerializeField] private float health, mana, gravityScale, attackCooldown;
     [SerializeField] private float invincibilityTimer, dashTimer, directionTimer, attackTimer;
-    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput, timerOn, attackOn;
+    [SerializeField] private bool isAttacking, attackCheck, isFirstAttack, gotInput, attack1, attack2, dashAttack, invincible, dashing, dashCheck, downInput, upInput, timerOn, attackOn, knockback;
     [SerializeField] private int damageDirection, attackCount, comboMax;
 
     //function called on load
@@ -58,6 +58,8 @@ public class PlayerCombat : MonoBehaviour
         attackCount = 0;
         attackTimer = 0f;
         attackOn = true;
+
+        knockback = false;
     }
 
     //function called each frame
@@ -254,7 +256,7 @@ public class PlayerCombat : MonoBehaviour
             //checks what state needs to be transitioned to
             if (health > 0.0f)
             {
-                knockback();
+                Knockback();
             }
             else
             {
@@ -271,22 +273,25 @@ public class PlayerCombat : MonoBehaviour
     }
 
     //function that handles getting knockback from a hit
-    private void knockback()
+    private void Knockback()
     {
+        knockback = true;
 
         invincible = true;
         invincibilityTimer = invincibilityDuration;
 
-        animator.SetBool("Knockback", true);
+        animator.SetBool("Knockback", knockback);
 
         rb.velocity = new Vector2(knockbackSpeed.x * damageDirection, knockbackSpeed.y);
+
         disableMovement();
     }
 
     //Function that ends the knockback state for the player;
     private void endKnockback()
     {
-        animator.SetBool("Knockback", false);
+        knockback = false;
+        animator.SetBool("Knockback", knockback);
         enableMovement();
     }
 
@@ -353,6 +358,11 @@ public class PlayerCombat : MonoBehaviour
     public void EndAttacking()
     {
         isAttacking = false;
+    }
+
+    public bool getKnockback()
+    {
+        return knockback;
     }
 
 }

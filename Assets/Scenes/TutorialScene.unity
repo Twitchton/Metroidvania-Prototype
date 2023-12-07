@@ -2278,7 +2278,7 @@ MonoBehaviour:
   invincibilityDuration: 1
   dashCooldown: 0.75
   directionTime: 0.15
-  knockbackSpeed: {x: 10, y: 5}
+  knockbackSpeed: {x: 7, y: 5}
   dashPower: {x: 23, y: 0}
   health: 0
   mana: 0
@@ -2302,6 +2302,7 @@ MonoBehaviour:
   upInput: 0
   timerOn: 0
   attackOn: 0
+  knockback: 0
   damageDirection: 0
   attackCount: 0
   comboMax: 3
