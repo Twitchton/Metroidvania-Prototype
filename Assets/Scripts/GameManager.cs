@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject endScreen;
     [SerializeField] private GameObject controlsScreen;
     [SerializeField] private TextMeshProUGUI endText;
+    [SerializeField] private TextMeshProUGUI objectiveText;
 
     //variables
     public Image healthBar;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         showHealth();
+        objectiveText.text = "Kill enemies: " + (numEnemies - deadCount) + " enemies remaining";
     }
 
     //input start
