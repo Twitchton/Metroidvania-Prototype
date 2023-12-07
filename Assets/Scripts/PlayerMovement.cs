@@ -27,7 +27,7 @@ public class PlayerMovement: MonoBehaviour
     private float dashDuration;
 
     //wall sliding variables
-    private bool isWallSliding;
+    [SerializeField] private bool isWallSliding;
     private float characterPos;
     [SerializeField] private float wallSlidingSpeed = 1f;
 
