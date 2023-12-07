@@ -148,4 +148,10 @@ public class GameManager : MonoBehaviour
         controlsScreen.SetActive(controls);
         pauseScreen.SetActive(!controls);
     }
+
+    //method that returns game to main menu
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }
